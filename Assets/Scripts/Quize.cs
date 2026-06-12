@@ -93,7 +93,7 @@ public class Quiz {
         char correctKana = row[missingIndex];
 
         char[] chars = row.ToCharArray();
-        chars[missingIndex] = '○';
+        chars[missingIndex] = '□';
 
         Question = new string(chars);
 

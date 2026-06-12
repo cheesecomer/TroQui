@@ -24,19 +24,16 @@ public class QuizManager : MonoBehaviour
 
     [Header("Question")]
     [SerializeField] private TMP_Text questionText;
-    [SerializeField] private GameObject leftChoicePanel;
-    [SerializeField] private GameObject rightChoicePanel;
     [SerializeField] private TMP_Text leftChoiceText;
     [SerializeField] private TMP_Text rightChoiceText;
 
     [Header("Status")]
     [SerializeField] private TMP_Text countdownText;
     [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text scoreResultText;
     [SerializeField] private TMP_Text lifeText;
 
     [Header("Highlight")]
-    [SerializeField] private Image leftChoiceImage;
-    [SerializeField] private Image rightChoiceImage;
     [SerializeField] private Color normalColor = Color.white;
     [SerializeField] private Color highlightColor = Color.yellow;
 
@@ -62,6 +59,8 @@ public class QuizManager : MonoBehaviour
     private Quiz quiz;
     private GameObject currentResultMark;
     private bool transitioning;
+    private float leftChoiceTextFontSize = 0f;
+    private float rightChoiceTextFontSize = 0f;
 
     public void Retry()
     {
@@ -72,7 +71,12 @@ public class QuizManager : MonoBehaviour
 
     private void Start()
     {
+        retryButton.gameObject.SetActive(false);
+        scoreResultText.gameObject.SetActive(false);
         scoreText.gameObject.SetActive(false);
+
+        this.leftChoiceTextFontSize = leftChoiceText.fontSize;
+        this.rightChoiceTextFontSize = rightChoiceText.fontSize;
         WaitNextQuestion(firstQuestionDelay);
         // StartCoroutine(DerailAnimation());
     }
@@ -135,8 +139,8 @@ public class QuizManager : MonoBehaviour
         timer = delay;
 
         questionText.gameObject.SetActive(false);
-        leftChoicePanel.SetActive(false);
-        rightChoicePanel.SetActive(false);
+        leftChoiceText.gameObject.SetActive(false);
+        rightChoiceText.gameObject.SetActive(false);
         countdownText.gameObject.SetActive(false);
         HideResultMarksImmediate();
     }
@@ -158,8 +162,8 @@ public class QuizManager : MonoBehaviour
         leftChoiceText.text = this.quiz.Left;
         rightChoiceText.text = this.quiz.Right;
 
-        leftChoicePanel.SetActive(false);
-        rightChoicePanel.SetActive(false);
+        leftChoiceText.gameObject.SetActive(false);
+        rightChoiceText.gameObject.SetActive(false);
         countdownText.gameObject.SetActive(false);
 
         UpdateStatus();
@@ -171,7 +175,7 @@ public class QuizManager : MonoBehaviour
         state = QuizState.ShowRightChoice;
         timer = 1.0f;
 
-        rightChoicePanel.SetActive(true);
+        rightChoiceText.gameObject.SetActive(true);
     }
 
     private void ShowLeftChoice()
@@ -179,7 +183,7 @@ public class QuizManager : MonoBehaviour
         state = QuizState.ShowLeftChoice;
         timer = 1.0f;
 
-        leftChoicePanel.SetActive(true);
+        leftChoiceText.gameObject.SetActive(true);
     }
 
     private void StartCountdown()
@@ -236,10 +240,11 @@ public class QuizManager : MonoBehaviour
 
         yield return StartCoroutine(DerailAnimation());
 
-        questionText.text = "ゲームオーバー";
-        leftChoicePanel.SetActive(false);
-        rightChoicePanel.SetActive(false);
+        questionText.text = "ざんねん！";
+        leftChoiceText.gameObject.SetActive(false);
+        rightChoiceText.gameObject.SetActive(false);
         countdownText.gameObject.SetActive(false);
+        scoreText.gameObject.SetActive(false);
     }
 
     private float GetTimeLimit()
@@ -257,19 +262,19 @@ public class QuizManager : MonoBehaviour
 
     private void UpdateHighlight()
 {
-        leftChoiceImage.color =
+        leftChoiceText.color =
             selectedSide == Quiz.Side.Left ? highlightColor : normalColor;
-        leftChoicePanel.transform.localScale =
+        leftChoiceText.fontSize =
             selectedSide == Quiz.Side.Left
-                ? Vector3.one * 1.2f
-                : Vector3.one;
+                ? (leftChoiceTextFontSize * 1.2f)
+                : leftChoiceTextFontSize;
 
-        rightChoiceImage.color =
+        rightChoiceText.color =
             selectedSide == Quiz.Side.Right ? highlightColor : normalColor;
-        rightChoicePanel.transform.localScale =
+        rightChoiceText.fontSize =
             selectedSide == Quiz.Side.Right
-                ? Vector3.one * 1.2f
-                : Vector3.one;
+                ? (rightChoiceTextFontSize * 1.2f)
+                : rightChoiceTextFontSize;
     }
 
     private void ShowResultMark(GameObject mark)
@@ -375,5 +380,7 @@ public class QuizManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         retryButton.SetActive(true);
+        scoreResultText.gameObject.SetActive(true);
+        scoreResultText.text = $"{score} もん !";
     }
 }
