@@ -55,8 +55,14 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private GameObject rail;
     [SerializeField] private GameObject retryButton;
     
+    [Header("Guess Number")]
     [SerializeField] private GuessNumberPanel guessNumberPanel;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip correctSe;
+    [SerializeField] private AudioClip wrongSe;
+    [SerializeField] private AudioClip gameOverSe;
     private QuizState state;
     private float timer;
 
@@ -239,6 +245,7 @@ public class QuizManager : MonoBehaviour
         if (isCorrect)
         {
             ShowResultMark(circleMark);
+            audioSource.PlayOneShot(correctSe);
             state = QuizState.Correct;
             timer = 0.5f;
         }
@@ -246,6 +253,7 @@ public class QuizManager : MonoBehaviour
         {
             life--;
             ShowResultMark(crossMark);
+            audioSource.PlayOneShot(wrongSe);
             state = QuizState.Wrong;
             timer = 0.8f;
         }
@@ -258,6 +266,8 @@ public class QuizManager : MonoBehaviour
         state = QuizState.GameOver;
 
         yield return StartCoroutine(DerailAnimation());
+
+        audioSource.PlayOneShot(gameOverSe);
 
         retryButton.SetActive(true);
         scoreResultText.gameObject.SetActive(true);
