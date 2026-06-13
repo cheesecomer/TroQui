@@ -63,6 +63,12 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private AudioClip correctSe;
     [SerializeField] private AudioClip wrongSe;
     [SerializeField] private AudioClip gameOverSe;
+
+    [Header("On Back Button Press")]
+    [SerializeField] private GameObject pauseDialog;
+    [SerializeField] private string titleSceneName = "TitleScene";
+
+    private bool isPauseDialogOpen;
     private QuizState state;
     private float timer;
 
@@ -97,6 +103,16 @@ public class QuizManager : MonoBehaviour
 
     private void Update()
     {
+        if (isPauseDialogOpen) {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            HandleBackButton();
+            return;
+        }
+        
         timer -= Time.deltaTime;
 
         switch (state)
@@ -423,5 +439,42 @@ public class QuizManager : MonoBehaviour
         rail.GetComponent<RailScroller>().enabled = false;
 
         yield return new WaitForSeconds(1f);
+    }
+
+    private void HandleBackButton()
+    {
+        if (state == QuizState.GameOver)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(titleSceneName);
+            return;
+        }
+
+        if (isPauseDialogOpen)
+        {
+            ClosePauseDialog();
+            return;
+        }
+
+        OpenPauseDialog();
+    }
+
+    private void OpenPauseDialog()
+    {
+        isPauseDialogOpen = true;
+        pauseDialog.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void ClosePauseDialog()
+    {
+        isPauseDialogOpen = false;
+        pauseDialog.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+    public void BackToTitle()
+    {
+        Time.timeScale = 1f;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(titleSceneName);
     }
 }

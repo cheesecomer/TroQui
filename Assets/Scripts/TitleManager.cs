@@ -14,6 +14,19 @@ public class TitleManager : MonoBehaviour
 
     private bool started;
 
+    private void Update()
+    {
+        if (started) return;
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                Application.Quit();
+            #endif
+        }
+    }
+
     public void StartGame()
     {
         if (started) return;
