@@ -42,7 +42,6 @@ public class Quiz {
     {
         var values = (QuizType[])Enum.GetValues(typeof(QuizType));
         return values[UnityEngine.Random.Range(0, values.Length)];
-        // return QuizType.GuessNumber;
     }
 
     private void GenerateAdditionQuiz() {

@@ -1580,6 +1580,7 @@ GameObject:
   - component: {fileID: 1233547481}
   - component: {fileID: 1233547483}
   - component: {fileID: 1233547482}
+  - component: {fileID: 1233547484}
   m_Layer: 5
   m_Name: GuessNumberRoot
   m_TagString: Untagged
@@ -1647,6 +1648,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1233547480}
   m_CullTransparentMesh: 1
+--- !u!114 &1233547484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233547480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b21539408d4548d5939cd9e37b2d936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuessNumberPanel
+  itemsRoot: {fileID: 746765168}
+  guessNumberPrefabs:
+  - {fileID: 6529334535265761264, guid: 25a5b192667ad4dc0a37d1e67a0578ca, type: 3}
+  - {fileID: 814514573003689507, guid: 48559c49f2ea44b0b93f3c92ecd93206, type: 3}
+  - {fileID: 5034858886766321019, guid: 044a8689fa94b48dda5aa40629a7da5b, type: 3}
+  - {fileID: 3218656149129842266, guid: 41d9b0e2c2099444396635c9807d2a1c, type: 3}
+  - {fileID: 595140081052372525, guid: 5f64f5c8f4e20499296f8bb6035cd026, type: 3}
+  - {fileID: 6086114788857304645, guid: bd93cf2f83b5549cfb7a32f024937448, type: 3}
 --- !u!1 &1246481552
 GameObject:
   m_ObjectHideFlags: 0

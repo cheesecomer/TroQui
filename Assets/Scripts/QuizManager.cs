@@ -54,9 +54,7 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private GameObject rail;
     [SerializeField] private GameObject retryButton;
     
-    [SerializeField] private GameObject guessNumberRoot;
-    [SerializeField] private Transform itemsRoot;
-    [SerializeField] private GameObject[] guessNumberPrefabs;
+    [SerializeField] private GuessNumberPanel guessNumberPanel;
 
     private QuizState state;
     private float timer;
@@ -146,7 +144,7 @@ public class QuizManager : MonoBehaviour
         state = QuizState.WaitingNextQuestion;
         timer = delay;
 
-        guessNumberRoot.SetActive(false);
+        guessNumberPanel.gameObject.SetActive(false);
         questionPanel.SetActive(false);
         questionText.gameObject.SetActive(false);
         leftChoiceText.gameObject.SetActive(false);
@@ -177,12 +175,12 @@ public class QuizManager : MonoBehaviour
         countdownText.gameObject.SetActive(false);
 
         if (this.quiz.Type == Quiz.QuizType.GuessNumber) {
-            ShowItems(this.quiz.ItemNum);
+            this.guessNumberPanel.ShowItems(this.quiz.ItemNum);
             questionPanel.SetActive(false);
-            guessNumberRoot.SetActive(true);
+            guessNumberPanel.gameObject.SetActive(true);
         } else {
             questionPanel.SetActive(true);
-            guessNumberRoot.SetActive(false);
+            guessNumberPanel.gameObject.SetActive(false);
         }
 
         UpdateStatus();
@@ -262,7 +260,7 @@ public class QuizManager : MonoBehaviour
         questionText.text = "ざんねん！";
         this.questionText.gameObject.SetActive(true );
         this.questionPanel.SetActive(true);
-        this.guessNumberRoot.SetActive(false);
+        this.guessNumberPanel.gameObject.SetActive(false);
         leftChoiceText.gameObject.SetActive(false);
         rightChoiceText.gameObject.SetActive(false);
         countdownText.gameObject.SetActive(false);
@@ -406,162 +404,5 @@ public class QuizManager : MonoBehaviour
         retryButton.SetActive(true);
         scoreResultText.gameObject.SetActive(true);
         scoreResultText.text = $"{score} もん !";
-    }
-
-    private readonly Vector2[] itemPositions =
-    {
-        new(-160,  80),
-        new(   0,  90),
-        new( 160,  75),
-        new(-200, -20),
-        new( -80, -25),
-        new(  80, -15),
-        new( 200, -30),
-        new(-150, -115),
-        new(  10, -125),
-        new( 170, -110),
-    };
-    private readonly Dictionary<int, Vector2[]> itemPositionPatterns = new()
-    {
-        { 1, new[] { new Vector2(0, 0) } },
-
-        { 2, new[]
-            {
-                new Vector2(-70, 20),
-                new Vector2(70, -20),
-            }
-        },
-
-        { 3, new[]
-            {
-                new Vector2(-90, -20),
-                new Vector2(0, 55),
-                new Vector2(90, -20),
-            }
-        },
-
-        { 4, new[]
-            {
-                new Vector2(-90, 45),
-                new Vector2(90, 45),
-                new Vector2(-80, -55),
-                new Vector2(80, -55),
-            }
-        },
-
-        { 5, new[]
-            {
-                new Vector2(-140, 50),
-                new Vector2(0, 65),
-                new Vector2(140, 50),
-                new Vector2(-70, -55),
-                new Vector2(70, -55),
-            }
-        },
-
-        { 6, new[]
-            {
-                new Vector2(-150, 55),
-                new Vector2(0, 65),
-                new Vector2(150, 55),
-                new Vector2(-150, -55),
-                new Vector2(0, -65),
-                new Vector2(150, -55),
-            }
-        },
-        {
-            7, new[]
-            {
-                new Vector2(-140,  70),
-                new Vector2(   0,  80),
-                new Vector2( 140,  70),
-
-                new Vector2(-180,   0),
-                new Vector2(   0,   0),
-                new Vector2( 180,   0),
-
-                new Vector2(   0, -80),
-            }
-        },
-        {
-            8, new[]
-            {
-                new Vector2(-150,  80),
-                new Vector2( -50,  90),
-                new Vector2(  50,  90),
-                new Vector2( 150,  80),
-
-                new Vector2(-150, -20),
-                new Vector2( -50, -40),
-                new Vector2(  50, -40),
-                new Vector2( 150, -20),
-            }
-        },
-        {
-            9, new[]
-            {
-                new Vector2(-150,  80),
-                new Vector2(   0,  90),
-                new Vector2( 150,  80),
-
-                new Vector2(-170,   0),
-                new Vector2(   0,   0),
-                new Vector2( 170,   0),
-
-                new Vector2(-150, -80),
-                new Vector2(   0, -90),
-                new Vector2( 150, -80),
-            }
-        },
-        {
-            10, new[]
-            {
-                new Vector2(-180,  80),
-                new Vector2( -90,  90),
-                new Vector2(   0, 100),
-                new Vector2(  90,  90),
-                new Vector2( 180,  80),
-
-                new Vector2(-180, -40),
-                new Vector2( -90, -60),
-                new Vector2(   0, -70),
-                new Vector2(  90, -60),
-                new Vector2( 180, -40),
-            }
-        }
-    };
-    private float GetItemScale(int count)
-    {
-        return count switch
-        {
-            <= 1 => 1.5f,
-            <= 2 => 1.35f,
-            <= 3 => 1.2f,
-            <= 5 => 1.05f,
-            <= 7 => 0.9f,
-            _ => 0.78f,
-        };
-    }
-    private void ShowItems(int count)
-    {
-        foreach (Transform child in itemsRoot)
-        {
-            Destroy(child.gameObject);
-        }
-
-        var prefab = this.guessNumberPrefabs[UnityEngine.Random.Range(0, this.guessNumberPrefabs.Length)];
-        var positions = itemPositionPatterns[count];
-
-        float baseScale = GetItemScale(count);
-        for (int i = 0; i < count; i++)
-        {
-            var obj = Instantiate(prefab, itemsRoot);
-            var rect = obj.GetComponent<RectTransform>();
-            float randomScale = Random.Range(0.95f, 1.05f);
-
-            rect.anchoredPosition = positions[i];
-            rect.localRotation = Quaternion.Euler(0, 0, Random.Range(-12f, 12f));
-            rect.localScale = Vector3.one * baseScale * randomScale;
-        }
     }
 }
