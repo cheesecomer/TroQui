@@ -5,7 +5,7 @@ public class Quiz {
     public enum QuizType {
         Addition,
         KanaFill,
-        // GuessNumber,
+        GuessNumber,
         // KanaChoice
     }
 
@@ -19,6 +19,7 @@ public class Quiz {
     public string Right { get; private set; }
     public Side CorrectSide { get; private set; }
     public QuizType Type { get; private set; }
+    public int ItemNum { get; private set; }
 
     public Quiz() : this(GetRandomQuizType()) {
     }
@@ -31,14 +32,17 @@ public class Quiz {
             case QuizType.KanaFill:
                 GenerateKanaFillQuiz();
                 break;
+            case QuizType.GuessNumber:
+                GenerateGuessNumberQuiz();
+                break;
         }
-        // GenerateAdditionQuiz();
         this.Type = type;
     }
     private static QuizType GetRandomQuizType()
     {
         var values = (QuizType[])Enum.GetValues(typeof(QuizType));
         return values[UnityEngine.Random.Range(0, values.Length)];
+        // return QuizType.GuessNumber;
     }
 
     private void GenerateAdditionQuiz() {
@@ -118,6 +122,33 @@ public class Quiz {
             Left = $"← {wrongKana}";
             Right = $"{correctKana} →";
             CorrectSide = Side.Right;
+        }
+    }
+
+    private void GenerateGuessNumberQuiz()
+    {
+        this.ItemNum = UnityEngine.Random.Range(1, 11);
+
+        this.Question = "なんこある？";
+
+        int wrongAnswer;
+        do
+        {
+            wrongAnswer = UnityEngine.Random.Range(1, 11);
+        }
+        while (wrongAnswer == ItemNum);
+
+        if (UnityEngine.Random.value < 0.5f)
+        {
+            Left = $"← {ItemNum}";
+            Right = $"{wrongAnswer} →";
+            CorrectSide = Quiz.Side.Left;
+        }
+        else
+        {
+            Left = $"← {wrongAnswer}";
+            Right = $"{ItemNum} →";
+            CorrectSide = Quiz.Side.Right;
         }
     }
 }

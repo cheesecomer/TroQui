@@ -3,17 +3,11 @@ using UnityEngine;
 public class CartBob : MonoBehaviour
 {
     [SerializeField] private float fps = 8f;
+    [SerializeField] private float small = 2f;
+    [SerializeField] private float middle = 3f;
+    [SerializeField] private float large = 5f;
 
-    private readonly float[] pattern = {
-        0f,
-        2f,
-        0f,
-        3f,
-        0f,
-        2f,
-        0f,
-        5f
-    };
+    private float[] pattern = {};
 
     private Vector3 startPos;
     private float timer;
@@ -23,6 +17,16 @@ public class CartBob : MonoBehaviour
     private void Start()
     {
         startPos = transform.localPosition;
+        this.pattern = new float[] {
+            0f,
+            this.small,
+            0f,
+            this.middle,
+            0f,
+            this.small,
+            0f,
+            this.large
+        };
     }
 
     private void Update()
