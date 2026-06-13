@@ -34,6 +34,7 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private TMP_Text countdownText;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text scoreResultText;
+    [SerializeField] private TMP_Text newRecordText;
     [SerializeField] private TMP_Text lifeText;
 
     [Header("Highlight")]
@@ -79,6 +80,7 @@ public class QuizManager : MonoBehaviour
     {
         retryButton.gameObject.SetActive(false);
         scoreResultText.gameObject.SetActive(false);
+        newRecordText.gameObject.SetActive(false);
         scoreText.gameObject.SetActive(false);
 
         this.leftChoiceTextFontSize = leftChoiceText.fontSize;
@@ -257,7 +259,18 @@ public class QuizManager : MonoBehaviour
 
         yield return StartCoroutine(DerailAnimation());
 
+        retryButton.SetActive(true);
+        scoreResultText.gameObject.SetActive(true);
+
+        var highScore = Preference.Instance.HighScore;
+        Preference.Instance.HighScore = this.score;
+        if (highScore < this.score) {
+            newRecordText.gameObject.SetActive(true);
+        }
+
         questionText.text = "ざんねん！";
+        scoreResultText.text = $"{score} もん";
+
         this.questionText.gameObject.SetActive(true );
         this.questionPanel.SetActive(true);
         this.guessNumberPanel.gameObject.SetActive(false);
@@ -400,9 +413,5 @@ public class QuizManager : MonoBehaviour
         rail.GetComponent<RailScroller>().enabled = false;
 
         yield return new WaitForSeconds(1f);
-
-        retryButton.SetActive(true);
-        scoreResultText.gameObject.SetActive(true);
-        scoreResultText.text = $"{score} もん !";
     }
 }
