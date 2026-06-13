@@ -50,7 +50,7 @@ public class Quiz {
 
     private void GenerateAdditionQuiz() {
         int answer = UnityEngine.Random.Range(2, 11); // 2～10
-        int left = UnityEngine.Random.Range(1, answer);
+        int left = UnityEngine.Random.Range(1, 5);
         int right = answer - left;
 
         Question = $"{left} + {right}";
