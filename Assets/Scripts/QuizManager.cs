@@ -1,94 +1,150 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class QuizManager : MonoBehaviour
 {
-    private enum QuizState
-    {
-        WaitingNextQuestion,
-        QuestionIntro,
-        ShowLeftChoice,
-        ShowRightChoice,
-        Countdown,
-        Correct,
-        Wrong,
-        GameOver
-    }
     [SerializeField] private float firstQuestionDelay = 1f;
     [SerializeField] private float nextQuestionDelay = 0.5f;
 
-    [Header("Question")]
-    [SerializeField] private GameObject questionPanel;
+    [Header("Question")] [SerializeField] private GameObject questionPanel;
+
     [SerializeField] private TMP_Text questionText;
     [SerializeField] private TMP_Text leftChoiceText;
     [SerializeField] private TMP_Text rightChoiceText;
 
-    [Header("Status")]
-    [SerializeField] private TMP_Text countdownText;
+    [Header("Status")] [SerializeField] private TMP_Text countdownText;
+
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text scoreResultText;
     [SerializeField] private TMP_Text newRecordText;
     [SerializeField] private TMP_Text lifeText;
 
-    [Header("Highlight")]
-    [SerializeField] private Color normalColor = Color.white;
+    [Header("Highlight")] [SerializeField] private Color normalColor = Color.white;
+
     [SerializeField] private Color highlightColor = Color.yellow;
 
-    [Header("Cart")]
-    [SerializeField] private RectTransform cartTransform;
+    [Header("Cart")] [SerializeField] private RectTransform cartTransform;
+
     [SerializeField] private float tiltThreshold = 0.25f;
     [SerializeField] private float cartMaxAngle = 30f;
 
-    [Header("Result Marks")]
-    [SerializeField] private GameObject circleMark;
+    [Header("Result Marks")] [SerializeField]
+    private GameObject circleMark;
+
     [SerializeField] private GameObject crossMark;
     [SerializeField] private float resultFadeTime = 0.25f;
 
     [SerializeField] private GameObject cave;
     [SerializeField] private GameObject rail;
     [SerializeField] private GameObject retryButton;
-    
-    [Header("Guess Number")]
-    [SerializeField] private GuessNumberPanel guessNumberPanel;
 
-    [Header("Kana Choice")]
-    [SerializeField] private GameObject kanaChoicePanel;
+    [Header("Guess Number")] [SerializeField]
+    private GuessNumberPanel guessNumberPanel;
+
+    [Header("Kana Choice")] [SerializeField]
+    private GameObject kanaChoicePanel;
+
     [SerializeField] private TMP_Text kanaChoiceQuestionText;
     [SerializeField] private Image kanaChoiceQuestionImage;
     [SerializeField] private KanaChoiceQuestion[] kanaChoiceQuestions;
 
-    [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
+    [Header("Audio")] [SerializeField] private AudioSource audioSource;
+
     [SerializeField] private AudioClip correctSe;
     [SerializeField] private AudioClip wrongSe;
     [SerializeField] private AudioClip gameOverSe;
 
-    [Header("On Back Button Press")]
-    [SerializeField] private GameObject pauseDialog;
+    [Header("On Back Button Press")] [SerializeField]
+    private GameObject pauseDialog;
+
     [SerializeField] private string titleSceneName = "TitleScene";
 
-    [Header("Fade")]
-    [SerializeField] private Image fadeImage;
+    [Header("Fade")] [SerializeField] private Image fadeImage;
+
     [SerializeField] private float fadeDuration = 0.5f;
+    private GameObject _currentResultMark;
 
-    private bool isPauseDialogOpen;
-    private QuizState state;
-    private float timer;
+    private bool _isPauseDialogOpen;
+    private float _leftChoiceTextFontSize;
+    private int _life = 3;
+    private Quiz _quiz;
+    private float _rightChoiceTextFontSize;
 
-    private int score = 0;
-    private int life = 3;
-    private Quiz.Side? selectedSide = null;
-    private Quiz quiz;
-    private GameObject currentResultMark;
-    private bool transitioning;
-    private float leftChoiceTextFontSize = 0f;
-    private float rightChoiceTextFontSize = 0f;
+    private int _score;
+    private Quiz.Side? _selectedSide;
+    private QuizState _state;
+    private float _timer;
+    private bool _transitioning;
+
+    private void Awake()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+    }
+
+    private void Start()
+    {
+        StartCoroutine(FadeIn());
+
+        retryButton.gameObject.SetActive(false);
+        scoreResultText.gameObject.SetActive(false);
+        newRecordText.gameObject.SetActive(false);
+        scoreText.gameObject.SetActive(false);
+
+        _leftChoiceTextFontSize = leftChoiceText.fontSize;
+        _rightChoiceTextFontSize = rightChoiceText.fontSize;
+        WaitNextQuestion(firstQuestionDelay);
+        // StartCoroutine(DerailAnimation());
+    }
+
+    private void Update()
+    {
+        if (_isPauseDialogOpen) return;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            HandleBackButton();
+            return;
+        }
+
+        _timer -= Time.deltaTime;
+
+        switch (_state)
+        {
+            case QuizState.WaitingNextQuestion:
+                if (_timer <= 0f) StartQuestion();
+                break;
+            case QuizState.QuestionIntro:
+                if (_timer <= 0f) ShowLeftChoice();
+                break;
+
+            case QuizState.ShowLeftChoice:
+                if (_timer <= 0f) ShowRightChoice();
+                break;
+
+            case QuizState.ShowRightChoice:
+                if (_timer <= 0f) StartCountdown();
+                break;
+
+            case QuizState.Countdown:
+                UpdateTilt();
+                UpdateCountdown();
+
+                if (_timer <= 0f) Judge();
+                break;
+
+            case QuizState.Correct:
+                if (_timer <= 0f) StartCoroutine(HideResultMarkThenNext());
+
+                break;
+
+            case QuizState.Wrong:
+                if (_timer <= 0f) StartCoroutine(HideResultMarkThenNext());
+                break;
+        }
+    }
 
     public void Retry()
     {
@@ -104,87 +160,10 @@ public class QuizManager : MonoBehaviour
         );
     }
 
-    private void Start()
-    {
-        StartCoroutine(FadeIn());
-
-        retryButton.gameObject.SetActive(false);
-        scoreResultText.gameObject.SetActive(false);
-        newRecordText.gameObject.SetActive(false);
-        scoreText.gameObject.SetActive(false);
-
-        this.leftChoiceTextFontSize = leftChoiceText.fontSize;
-        this.rightChoiceTextFontSize = rightChoiceText.fontSize;
-        WaitNextQuestion(firstQuestionDelay);
-        // StartCoroutine(DerailAnimation());
-    }
-
-    private void Update()
-    {
-        if (isPauseDialogOpen) {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            HandleBackButton();
-            return;
-        }
-        
-        timer -= Time.deltaTime;
-
-        switch (state)
-        {
-            case QuizState.WaitingNextQuestion:
-                if (timer <= 0f)
-                {
-                    StartQuestion();
-                }
-                break;
-            case QuizState.QuestionIntro:
-                if (timer <= 0f) ShowLeftChoice();
-                break;
-
-            case QuizState.ShowLeftChoice:
-                if (timer <= 0f) ShowRightChoice();
-                break;
-
-            case QuizState.ShowRightChoice:
-                if (timer <= 0f) StartCountdown();
-                break;
-
-            case QuizState.Countdown:
-                UpdateTilt();
-                UpdateCountdown();
-
-                if (timer <= 0f) Judge();
-                break;
-
-            case QuizState.Correct:
-                if (timer <= 0f) {
-                    StartCoroutine(HideResultMarkThenNext());
-                }
-
-                break;
-
-            case QuizState.Wrong:
-                if (timer <= 0f)
-                {
-                    StartCoroutine(HideResultMarkThenNext());
-                }
-                break;
-        }
-    }
-
-    private void Awake()
-    {
-        Screen.sleepTimeout = SleepTimeout.NeverSleep;
-    }
-
     private void WaitNextQuestion(float delay)
     {
-        state = QuizState.WaitingNextQuestion;
-        timer = delay;
+        _state = QuizState.WaitingNextQuestion;
+        _timer = delay;
 
         guessNumberPanel.gameObject.SetActive(false);
         questionPanel.SetActive(false);
@@ -198,36 +177,41 @@ public class QuizManager : MonoBehaviour
     private void StartQuestion()
     {
         HideResultMarksImmediate();
-        state = QuizState.QuestionIntro;
-        timer = 1.5f;
-        this.selectedSide = null;
-        this.quiz = new Quiz(kanaChoiceQuestions);
-        score++;
+        _state = QuizState.QuestionIntro;
+        _timer = 1.5f;
+        _selectedSide = null;
+        _quiz = new Quiz(kanaChoiceQuestions);
+        _score++;
 
         cartTransform.localRotation = Quaternion.Euler(0, 0, 0);
         scoreText.gameObject.SetActive(true);
         questionText.gameObject.SetActive(true);
-        questionText.text = this.quiz.Question;
+        questionText.text = _quiz.Question;
 
-        leftChoiceText.text = this.quiz.Left;
-        rightChoiceText.text = this.quiz.Right;
+        leftChoiceText.text = _quiz.Left;
+        rightChoiceText.text = _quiz.Right;
 
         leftChoiceText.gameObject.SetActive(false);
         rightChoiceText.gameObject.SetActive(false);
         countdownText.gameObject.SetActive(false);
 
-        if (this.quiz.Type == Quiz.QuizType.GuessNumber) {
-            this.guessNumberPanel.ShowItems(this.quiz.ItemNum);
+        if (_quiz.Type == Quiz.QuizType.GuessNumber)
+        {
+            guessNumberPanel.ShowItems(_quiz.ItemNum);
             questionPanel.SetActive(false);
             guessNumberPanel.gameObject.SetActive(true);
-        } else if (this.quiz.Type == Quiz.QuizType.KanaChoice) {
+        }
+        else if (_quiz.Type == Quiz.QuizType.KanaChoice)
+        {
             questionPanel.SetActive(false);
             guessNumberPanel.gameObject.SetActive(false);
             kanaChoicePanel.SetActive(true);
 
-            this.kanaChoiceQuestionText.text = this.quiz.Question;
-            this.kanaChoiceQuestionImage.sprite = this.quiz.Image;
-        } else {
+            kanaChoiceQuestionText.text = _quiz.Question;
+            kanaChoiceQuestionImage.sprite = _quiz.Image;
+        }
+        else
+        {
             questionPanel.SetActive(true);
             guessNumberPanel.gameObject.SetActive(false);
             kanaChoicePanel.SetActive(false);
@@ -239,24 +223,24 @@ public class QuizManager : MonoBehaviour
 
     private void ShowRightChoice()
     {
-        state = QuizState.ShowRightChoice;
-        timer = 1.0f;
+        _state = QuizState.ShowRightChoice;
+        _timer = 1.0f;
 
         rightChoiceText.gameObject.SetActive(true);
     }
 
     private void ShowLeftChoice()
     {
-        state = QuizState.ShowLeftChoice;
-        timer = 1.0f;
+        _state = QuizState.ShowLeftChoice;
+        _timer = 1.0f;
 
         leftChoiceText.gameObject.SetActive(true);
     }
 
     private void StartCountdown()
     {
-        state = QuizState.Countdown;
-        timer = GetTimeLimit();
+        _state = QuizState.Countdown;
+        _timer = GetTimeLimit();
 
         countdownText.gameObject.SetActive(true);
         UpdateCountdown();
@@ -266,9 +250,9 @@ public class QuizManager : MonoBehaviour
     {
         float x = Input.acceleration.x;
 
-        if (x < -tiltThreshold) selectedSide = Quiz.Side.Left;
-        else if (x > tiltThreshold) selectedSide = Quiz.Side.Right;
-        else selectedSide = null;
+        if (x < -tiltThreshold) _selectedSide = Quiz.Side.Left;
+        else if (x > tiltThreshold) _selectedSide = Quiz.Side.Right;
+        else _selectedSide = null;
 
         cartTransform.localRotation = Quaternion.Euler(0, 0, -x * cartMaxAngle);
 
@@ -277,27 +261,27 @@ public class QuizManager : MonoBehaviour
 
     private void UpdateCountdown()
     {
-        countdownText.text = Mathf.CeilToInt(timer).ToString();
+        countdownText.text = Mathf.CeilToInt(_timer).ToString();
     }
 
     private void Judge()
     {
-        bool isCorrect = selectedSide == this.quiz.CorrectSide;
+        bool isCorrect = _selectedSide == _quiz.CorrectSide;
 
         if (isCorrect)
         {
             ShowResultMark(circleMark);
             audioSource.PlayOneShot(correctSe);
-            state = QuizState.Correct;
-            timer = 0.5f;
+            _state = QuizState.Correct;
+            _timer = 0.5f;
         }
         else
         {
-            life--;
+            _life--;
             ShowResultMark(crossMark);
             audioSource.PlayOneShot(wrongSe);
-            state = QuizState.Wrong;
-            timer = 0.8f;
+            _state = QuizState.Wrong;
+            _timer = 0.8f;
         }
 
         UpdateStatus();
@@ -305,7 +289,7 @@ public class QuizManager : MonoBehaviour
 
     private IEnumerator ShowGameOver()
     {
-        state = QuizState.GameOver;
+        _state = QuizState.GameOver;
 
         yield return StartCoroutine(DerailAnimation());
 
@@ -314,18 +298,16 @@ public class QuizManager : MonoBehaviour
         retryButton.SetActive(true);
         scoreResultText.gameObject.SetActive(true);
 
-        var highScore = Preference.Instance.HighScore;
-        Preference.Instance.HighScore = this.score;
-        if (highScore < this.score) {
-            newRecordText.gameObject.SetActive(true);
-        }
+        int highScore = Preference.Instance.HighScore;
+        Preference.Instance.HighScore = _score;
+        if (highScore < _score) newRecordText.gameObject.SetActive(true);
 
         questionText.text = "ざんねん！";
-        scoreResultText.text = $"{score} もん";
+        scoreResultText.text = $"{_score} もん";
 
-        this.questionText.gameObject.SetActive(true );
-        this.questionPanel.SetActive(true);
-        this.guessNumberPanel.gameObject.SetActive(false);
+        questionText.gameObject.SetActive(true);
+        questionPanel.SetActive(true);
+        guessNumberPanel.gameObject.SetActive(false);
         leftChoiceText.gameObject.SetActive(false);
         rightChoiceText.gameObject.SetActive(false);
         countdownText.gameObject.SetActive(false);
@@ -334,75 +316,71 @@ public class QuizManager : MonoBehaviour
 
     private float GetTimeLimit()
     {
-        if (score >= 10) return 5f;
-        if (score >= 5) return 8f;
+        if (_score >= 10) return 5f;
+        if (_score >= 5) return 8f;
         return 10f;
     }
 
     private void UpdateStatus()
     {
-        if (scoreText != null) scoreText.text = $"{score}";
-        if (lifeText != null) lifeText.text = new string('♥', life);
+        scoreText.text = $"{_score}";
+        lifeText.text = new string('♥', _life);
     }
 
     private void UpdateHighlight()
     {
         leftChoiceText.color =
-            selectedSide == Quiz.Side.Left ? highlightColor : normalColor;
+            _selectedSide == Quiz.Side.Left ? highlightColor : normalColor;
         leftChoiceText.fontSize =
-            selectedSide == Quiz.Side.Left
-                ? (leftChoiceTextFontSize * 1.2f)
-                : leftChoiceTextFontSize;
+            _selectedSide == Quiz.Side.Left
+                ? _leftChoiceTextFontSize * 1.2f
+                : _leftChoiceTextFontSize;
 
         rightChoiceText.color =
-            selectedSide == Quiz.Side.Right ? highlightColor : normalColor;
+            _selectedSide == Quiz.Side.Right ? highlightColor : normalColor;
         rightChoiceText.fontSize =
-            selectedSide == Quiz.Side.Right
-                ? (rightChoiceTextFontSize * 1.2f)
-                : rightChoiceTextFontSize;
+            _selectedSide == Quiz.Side.Right
+                ? _rightChoiceTextFontSize * 1.2f
+                : _rightChoiceTextFontSize;
     }
 
     private void ShowResultMark(GameObject mark)
     {
         HideResultMarksImmediate();
 
-        currentResultMark = mark;
-        currentResultMark.SetActive(true);
-        currentResultMark.transform.localScale = Vector3.one;
+        _currentResultMark = mark;
+        _currentResultMark.SetActive(true);
+        _currentResultMark.transform.localScale = Vector3.one;
     }
 
     private void HideResultMarksImmediate()
     {
-        if (circleMark != null) circleMark.SetActive(false);
-        if (crossMark != null) crossMark.SetActive(false);
-        currentResultMark = null;
+        circleMark.SetActive(false);
+        crossMark.SetActive(false);
+        _currentResultMark = null;
     }
 
     private IEnumerator HideResultMarkThenNext()
     {
-        if (transitioning) yield break;
-        transitioning = true;
+        if (_transitioning) yield break;
+        _transitioning = true;
 
         yield return AnimateResultMarkOut();
 
-        transitioning = false;
+        _transitioning = false;
 
-        if (life <= 0)
-        {
+        if (_life <= 0)
             StartCoroutine(ShowGameOver());
-        }
         else
-        {
             WaitNextQuestion(nextQuestionDelay);
-        }
     }
 
     private IEnumerator AnimateResultMarkOut()
     {
-        if (currentResultMark == null) yield break;
+        if (_currentResultMark == null) yield break;
 
-        var t = currentResultMark.transform;
-        float elapsed = 0f;
+        Transform t = _currentResultMark.transform;
+        var elapsed = 0f;
 
         Vector3 fromScale = Vector3.one;
         Vector3 toScale = Vector3.zero;
@@ -417,8 +395,8 @@ public class QuizManager : MonoBehaviour
             yield return null;
         }
 
-        currentResultMark.SetActive(false);
-        currentResultMark = null;
+        _currentResultMark.SetActive(false);
+        _currentResultMark = null;
     }
 
     private IEnumerator DerailAnimation()
@@ -461,7 +439,7 @@ public class QuizManager : MonoBehaviour
         cartTransform.localRotation =
             Quaternion.Euler(0, 0, -10);
 
-        cave.GetComponent<CaveRoteter>().enabled = false;
+        cave.GetComponent<CaveAnimation>().enabled = false;
         rail.GetComponent<RailScroller>().enabled = false;
 
         yield return new WaitForSeconds(1f);
@@ -469,13 +447,13 @@ public class QuizManager : MonoBehaviour
 
     private void HandleBackButton()
     {
-        if (state == QuizState.GameOver)
+        if (_state == QuizState.GameOver)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(titleSceneName);
+            SceneManager.LoadScene(titleSceneName);
             return;
         }
 
-        if (isPauseDialogOpen)
+        if (_isPauseDialogOpen)
         {
             ClosePauseDialog();
             return;
@@ -486,14 +464,14 @@ public class QuizManager : MonoBehaviour
 
     private void OpenPauseDialog()
     {
-        isPauseDialogOpen = true;
+        _isPauseDialogOpen = true;
         pauseDialog.SetActive(true);
         Time.timeScale = 0f;
     }
 
     public void ClosePauseDialog()
     {
-        isPauseDialogOpen = false;
+        _isPauseDialogOpen = false;
         pauseDialog.SetActive(false);
         Time.timeScale = 1f;
     }
@@ -501,7 +479,7 @@ public class QuizManager : MonoBehaviour
     public void BackToTitle()
     {
         Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(titleSceneName);
+        SceneManager.LoadScene(titleSceneName);
     }
 
     private IEnumerator FadeOut()
@@ -525,7 +503,7 @@ public class QuizManager : MonoBehaviour
 
         for (float t = 0; t < fadeDuration; t += Time.deltaTime)
         {
-            float alpha = 1f - (t / fadeDuration);
+            float alpha = 1f - t / fadeDuration;
             SetFadeAlpha(alpha);
             yield return null;
         }
@@ -536,8 +514,20 @@ public class QuizManager : MonoBehaviour
 
     private void SetFadeAlpha(float alpha)
     {
-        var color = fadeImage.color;
+        Color color = fadeImage.color;
         color.a = alpha;
         fadeImage.color = color;
+    }
+
+    private enum QuizState
+    {
+        WaitingNextQuestion,
+        QuestionIntro,
+        ShowLeftChoice,
+        ShowRightChoice,
+        Countdown,
+        Correct,
+        Wrong,
+        GameOver
     }
 }

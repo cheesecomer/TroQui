@@ -5,32 +5,32 @@ public class RailScroller : MonoBehaviour
     [SerializeField] private float fps = 8f;
     [SerializeField] private float yMove = 24f;
     [SerializeField] private float scaleMove = 0.08f;
+    private Vector2 _basePos;
+    private Vector2 _baseSize;
+    private int _frame;
 
-    private RectTransform rect;
-    private Vector2 basePos;
-    private Vector2 baseSize;
-    private float timer;
-    private int frame;
+    private RectTransform _rect;
+    private float _timer;
 
     private void Awake()
     {
-        rect = GetComponent<RectTransform>();
-        basePos = rect.anchoredPosition;
-        baseSize = rect.sizeDelta;
+        _rect = GetComponent<RectTransform>();
+        _basePos = _rect.anchoredPosition;
+        _baseSize = _rect.sizeDelta;
     }
 
     private void Update()
     {
-        timer += Time.deltaTime;
+        _timer += Time.deltaTime;
 
-        if (timer < 1f / fps) return;
+        if (_timer < 1f / fps) return;
 
-        timer = 0f;
-        frame = (frame + 1) % 4;
+        _timer = 0f;
+        _frame = (_frame + 1) % 4;
 
-        float t = frame / 3f; // 0, 0.33, 0.66, 1
+        float t = _frame / 3f; // 0, 0.33, 0.66, 1
 
-        rect.anchoredPosition = basePos + new Vector2(0f, -yMove * t);
-        rect.sizeDelta = baseSize * (1f + scaleMove * t);
+        _rect.anchoredPosition = _basePos + new Vector2(0f, -yMove * t);
+        _rect.sizeDelta = _baseSize * (1f + scaleMove * t);
     }
 }

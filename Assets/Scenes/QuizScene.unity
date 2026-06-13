@@ -3728,6 +3728,8 @@ MonoBehaviour:
   retryButton: {fileID: 1865866000}
   guessNumberPanel: {fileID: 1233547484}
   kanaChoicePanel: {fileID: 815164918}
+  kanaChoiceQuestionText: {fileID: 637743138}
+  kanaChoiceQuestionImage: {fileID: 1168477608}
   kanaChoiceQuestions:
   - word: "\u3042\u3072\u308B"
     sprite: {fileID: 1894275617, guid: de64ca35ff1e24e9bb5534263d310e86, type: 3}

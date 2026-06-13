@@ -6,43 +6,44 @@ public class CartBob : MonoBehaviour
     [SerializeField] private float small = 2f;
     [SerializeField] private float middle = 3f;
     [SerializeField] private float large = 5f;
+    private int _frame;
 
-    private float[] pattern = {};
+    private float[] _pattern = { };
 
-    private Vector3 startPos;
-    private float timer;
-    private int frame;
-    private int step;
+    private Vector3 _startPos;
+    private int _step;
+    private float _timer;
 
     private void Start()
     {
-        startPos = transform.localPosition;
-        this.pattern = new float[] {
+        _startPos = transform.localPosition;
+        _pattern = new[]
+        {
             0f,
-            this.small,
+            small,
             0f,
-            this.middle,
+            middle,
             0f,
-            this.small,
+            small,
             0f,
-            this.large
+            large
         };
     }
 
     private void Update()
     {
-        timer += Time.deltaTime;
+        _timer += Time.deltaTime;
 
-        if (timer < 1f / fps) return;
+        if (_timer < 1f / fps) return;
 
-        timer = 0f;
-        frame = (frame + 1) % 4;
+        _timer = 0f;
+        _frame = (_frame + 1) % 4;
 
-        float y = pattern[step];
+        float y = _pattern[_step];
 
         transform.localPosition =
-            startPos + new Vector3(0f, y, 0f);
+            _startPos + new Vector3(0f, y, 0f);
 
-        step = (step + 1) % pattern.Length;
+        _step = (_step + 1) % _pattern.Length;
     }
 }

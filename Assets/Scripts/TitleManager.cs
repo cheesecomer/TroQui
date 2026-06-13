@@ -1,7 +1,8 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour
 {
@@ -16,25 +17,25 @@ public class TitleManager : MonoBehaviour
     [SerializeField] private float exitX = 1800f;
     [SerializeField] private string quizSceneName = "QuizScene";
 
-    private bool started;
+    private bool _started;
 
     private void Update()
     {
-        if (started) return;
+        if (_started) return;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
                 Application.Quit();
-            #endif
+#endif
         }
     }
 
     public void StartGame()
     {
-        if (started) return;
-        started = true;
+        if (_started) return;
+        _started = true;
 
         StartCoroutine(StartGameFlow());
     }
@@ -43,10 +44,7 @@ public class TitleManager : MonoBehaviour
     {
         startButton.SetActive(false);
 
-        if (backgroundScroll != null)
-        {
-            backgroundScroll.Stop();
-        }
+        backgroundScroll.Stop();
 
         yield return StartCoroutine(MoveCartOut());
 
@@ -58,7 +56,7 @@ public class TitleManager : MonoBehaviour
     private IEnumerator MoveCartOut()
     {
         Vector2 startPos = cartTransform.anchoredPosition;
-        Vector2 endPos = new Vector2(exitX, startPos.y);
+        var endPos = new Vector2(exitX, startPos.y);
 
         for (float t = 0; t < cartMoveDuration; t += Time.deltaTime)
         {
@@ -87,7 +85,7 @@ public class TitleManager : MonoBehaviour
 
     private void SetFadeAlpha(float alpha)
     {
-        var color = fadeImage.color;
+        Color color = fadeImage.color;
         color.a = alpha;
         fadeImage.color = color;
     }
