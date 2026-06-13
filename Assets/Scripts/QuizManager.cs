@@ -23,7 +23,6 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private float firstQuestionDelay = 1f;
     [SerializeField] private float nextQuestionDelay = 0.5f;
 
-
     [Header("Question")]
     [SerializeField] private GameObject questionPanel;
     [SerializeField] private TMP_Text questionText;
@@ -58,6 +57,12 @@ public class QuizManager : MonoBehaviour
     [Header("Guess Number")]
     [SerializeField] private GuessNumberPanel guessNumberPanel;
 
+    [Header("Kana Choice")]
+    [SerializeField] private GameObject kanaChoicePanel;
+    [SerializeField] private TMP_Text kanaChoiceQuestionText;
+    [SerializeField] private Image kanaChoiceQuestionImage;
+    [SerializeField] private KanaChoiceQuestion[] kanaChoiceQuestions;
+
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip correctSe;
@@ -67,6 +72,10 @@ public class QuizManager : MonoBehaviour
     [Header("On Back Button Press")]
     [SerializeField] private GameObject pauseDialog;
     [SerializeField] private string titleSceneName = "TitleScene";
+
+    [Header("Fade")]
+    [SerializeField] private Image fadeImage;
+    [SerializeField] private float fadeDuration = 0.5f;
 
     private bool isPauseDialogOpen;
     private QuizState state;
@@ -83,6 +92,13 @@ public class QuizManager : MonoBehaviour
 
     public void Retry()
     {
+        StartCoroutine(DoRetry());
+    }
+
+    private IEnumerator DoRetry()
+    {
+        yield return StartCoroutine(FadeOut());
+
         SceneManager.LoadScene(
             SceneManager.GetActiveScene().name
         );
@@ -90,6 +106,8 @@ public class QuizManager : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(FadeIn());
+
         retryButton.gameObject.SetActive(false);
         scoreResultText.gameObject.SetActive(false);
         newRecordText.gameObject.SetActive(false);
@@ -183,7 +201,7 @@ public class QuizManager : MonoBehaviour
         state = QuizState.QuestionIntro;
         timer = 1.5f;
         this.selectedSide = null;
-        this.quiz = new Quiz();
+        this.quiz = new Quiz(kanaChoiceQuestions);
         score++;
 
         cartTransform.localRotation = Quaternion.Euler(0, 0, 0);
@@ -202,9 +220,17 @@ public class QuizManager : MonoBehaviour
             this.guessNumberPanel.ShowItems(this.quiz.ItemNum);
             questionPanel.SetActive(false);
             guessNumberPanel.gameObject.SetActive(true);
+        } else if (this.quiz.Type == Quiz.QuizType.KanaChoice) {
+            questionPanel.SetActive(false);
+            guessNumberPanel.gameObject.SetActive(false);
+            kanaChoicePanel.SetActive(true);
+
+            this.kanaChoiceQuestionText.text = this.quiz.Question;
+            this.kanaChoiceQuestionImage.sprite = this.quiz.Image;
         } else {
             questionPanel.SetActive(true);
             guessNumberPanel.gameObject.SetActive(false);
+            kanaChoicePanel.SetActive(false);
         }
 
         UpdateStatus();
@@ -476,5 +502,42 @@ public class QuizManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene(titleSceneName);
+    }
+
+    private IEnumerator FadeOut()
+    {
+        fadeImage.gameObject.SetActive(true);
+
+        for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        {
+            float alpha = t / fadeDuration;
+            SetFadeAlpha(alpha);
+            yield return null;
+        }
+
+        SetFadeAlpha(1f);
+    }
+
+    private IEnumerator FadeIn()
+    {
+        fadeImage.gameObject.SetActive(true);
+        SetFadeAlpha(1f);
+
+        for (float t = 0; t < fadeDuration; t += Time.deltaTime)
+        {
+            float alpha = 1f - (t / fadeDuration);
+            SetFadeAlpha(alpha);
+            yield return null;
+        }
+
+        SetFadeAlpha(0f);
+        fadeImage.gameObject.SetActive(false);
+    }
+
+    private void SetFadeAlpha(float alpha)
+    {
+        var color = fadeImage.color;
+        color.a = alpha;
+        fadeImage.color = color;
     }
 }

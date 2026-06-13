@@ -6,7 +6,7 @@ public class Quiz {
         Addition,
         KanaFill,
         GuessNumber,
-        // KanaChoice
+        KanaChoice
     }
 
     public enum Side {
@@ -20,11 +20,12 @@ public class Quiz {
     public Side CorrectSide { get; private set; }
     public QuizType Type { get; private set; }
     public int ItemNum { get; private set; }
+    public Sprite Image { get; private set; }
 
-    public Quiz() : this(GetRandomQuizType()) {
+    public Quiz(KanaChoiceQuestion[] kanaChoiceQuestions) : this(QuizType.KanaChoice, kanaChoiceQuestions) {
     }
 
-    public Quiz(QuizType type) {
+    public Quiz(QuizType type, KanaChoiceQuestion[] kanaChoiceQuestions) {
         switch (type) {
             case QuizType.Addition:
                 GenerateAdditionQuiz();
@@ -34,6 +35,9 @@ public class Quiz {
                 break;
             case QuizType.GuessNumber:
                 GenerateGuessNumberQuiz();
+                break;
+            case QuizType.KanaChoice:
+                GenerateKanaChoiceQuiz(kanaChoiceQuestions);
                 break;
         }
         this.Type = type;
@@ -148,6 +152,37 @@ public class Quiz {
             Left = $"← {wrongAnswer}";
             Right = $"{ItemNum} →";
             CorrectSide = Quiz.Side.Right;
+        }
+    }
+
+    private void GenerateKanaChoiceQuiz(KanaChoiceQuestion[] sources)
+    {
+        var source = sources[UnityEngine.Random.Range(0, sources.Length)];
+
+        string correctKana = source.word.Substring(0, 1);
+
+        Question = "□" + source.word.Substring(1);
+        Image = source.sprite;
+
+        string wrongKana;
+        do
+        {
+            var wrongSource = sources[UnityEngine.Random.Range(0, sources.Length)];
+            wrongKana = wrongSource.word.Substring(0, 1);
+        }
+        while (wrongKana == correctKana);
+
+        if (UnityEngine.Random.value < 0.5f)
+        {
+            Left = $"← {correctKana}";
+            Right = $"{wrongKana} →";
+            CorrectSide = Side.Left;
+        }
+        else
+        {
+            Left = $"← {wrongKana}";
+            Right = $"{correctKana} →";
+            CorrectSide = Side.Right;
         }
     }
 }
