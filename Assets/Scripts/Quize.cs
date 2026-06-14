@@ -18,11 +18,11 @@ public class Quiz
         Right
     }
 
-    public Quiz(KanaChoiceQuestion[] kanaChoiceQuestions) : this(GetRandomQuizType(), kanaChoiceQuestions)
+    public Quiz(KanaChoiceSource[] kanaChoiceSources) : this(GetRandomQuizType(), kanaChoiceSources)
     {
     }
 
-    public Quiz(QuizType type, KanaChoiceQuestion[] kanaChoiceQuestions)
+    public Quiz(QuizType type, KanaChoiceSource[] kanaChoiceSources)
     {
         switch (type)
         {
@@ -36,7 +36,7 @@ public class Quiz
                 GenerateGuessNumberQuiz();
                 break;
             case QuizType.KanaChoice:
-                GenerateKanaChoiceQuiz(kanaChoiceQuestions);
+                GenerateKanaChoiceQuiz(kanaChoiceSources);
                 break;
         }
 
@@ -59,20 +59,20 @@ public class Quiz
 
     private void GenerateAdditionQuiz()
     {
-        int answer = Random.Range(2, 11); // 2～10
-        int left = Random.Range(1, 5);
-        int right = answer - left;
+        int left = Random.Range(1, 5 + 1);
+        int right = Random.Range(1, 5 + 1);
+        int answer = left + right; // 2～10
 
         Question = $"{left} + {right}";
 
-        bool correctIsLeft = Random.value < 0.5f;
 
         int wrongAnswer;
         do
         {
-            wrongAnswer = Random.Range(1, 11);
+            wrongAnswer = Random.Range(2, 11);
         } while (wrongAnswer == answer);
 
+        bool correctIsLeft = Random.value < 0.5f;
         if (correctIsLeft)
         {
             Left = $"← {answer}";
@@ -163,20 +163,20 @@ public class Quiz
         }
     }
 
-    private void GenerateKanaChoiceQuiz(KanaChoiceQuestion[] sources)
+    private void GenerateKanaChoiceQuiz(KanaChoiceSource[] sources)
     {
-        KanaChoiceQuestion source = sources[Random.Range(0, sources.Length)];
+        KanaChoiceSource source = sources[Random.Range(0, sources.Length)];
 
-        string correctKana = source.word.Substring(0, 1);
+        var correctKana = source.word[0].ToString();
 
-        Question = "□" + source.word.Substring(1);
+        Question = "□" + source.word[1..];
         Image = source.sprite;
 
         string wrongKana;
         do
         {
-            KanaChoiceQuestion wrongSource = sources[Random.Range(0, sources.Length)];
-            wrongKana = wrongSource.word.Substring(0, 1);
+            KanaChoiceSource wrongSource = sources[Random.Range(0, sources.Length)];
+            wrongKana = wrongSource.word[0].ToString();
         } while (wrongKana == correctKana);
 
         if (Random.value < 0.5f)

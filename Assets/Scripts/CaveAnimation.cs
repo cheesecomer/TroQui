@@ -4,12 +4,12 @@ using UnityEngine.UI;
 
 public class CaveAnimation : MonoBehaviour
 {
-    [FormerlySerializedAs("Frame1")] [SerializeField] private Sprite frame1;
-    [FormerlySerializedAs("Frame2")] [SerializeField] private Sprite frame2;
-    [FormerlySerializedAs("Frame3")] [SerializeField] private Sprite frame3;
-    [FormerlySerializedAs("Frame4")] [SerializeField] private Sprite frame4;
-    [FormerlySerializedAs("Frame5")] [SerializeField] private Sprite frame5;
-    [FormerlySerializedAs("Frame6")] [SerializeField] private Sprite frame6;
+    [SerializeField] private Sprite frame1;
+    [SerializeField] private Sprite frame2;
+    [SerializeField] private Sprite frame3;
+    [SerializeField] private Sprite frame4;
+    [SerializeField] private Sprite frame5;
+    [SerializeField] private Sprite frame6;
 
     [SerializeField] private float fps = 8f;
     private int _frame;

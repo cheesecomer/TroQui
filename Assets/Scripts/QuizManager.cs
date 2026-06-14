@@ -49,7 +49,7 @@ public class QuizManager : MonoBehaviour
 
     [SerializeField] private TMP_Text kanaChoiceQuestionText;
     [SerializeField] private Image kanaChoiceQuestionImage;
-    [SerializeField] private KanaChoiceQuestion[] kanaChoiceQuestions;
+    [SerializeField] private KanaChoiceSource[] kanaChoiceQuestions;
 
     [Header("Audio")] [SerializeField] private AudioSource audioSource;
 

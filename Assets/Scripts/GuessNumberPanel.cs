@@ -150,7 +150,7 @@ public class GuessNumberPanel : MonoBehaviour
 
             rect.anchoredPosition = positions[i];
             rect.localRotation = Quaternion.Euler(0, 0, Random.Range(-12f, 12f));
-            rect.localScale = Vector3.one * baseScale * randomScale;
+            rect.localScale = Vector3.one * (baseScale * randomScale);
         }
     }
 }

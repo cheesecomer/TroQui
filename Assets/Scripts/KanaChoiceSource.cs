@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class KanaChoiceQuestion
+public class KanaChoiceSource
 {
     public string word;
     public Sprite sprite;
