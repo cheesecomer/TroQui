@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,12 +18,39 @@ public class Quiz
         Left,
         Right
     }
+    
+    private static readonly Queue<string> RecentKeys = new();
+    private const int RecentHistorySize = 10;
+    private const int MaxAttempts = 20;
 
-    public Quiz(KanaChoiceSource[] kanaChoiceSources) : this(GetRandomQuizType(), kanaChoiceSources)
+    private static void Remember(string key)
     {
+        RecentKeys.Enqueue(key);
+
+        while (RecentKeys.Count > RecentHistorySize)
+        {
+            RecentKeys.Dequeue();
+        }
     }
 
-    public Quiz(QuizType type, KanaChoiceSource[] kanaChoiceSources)
+    private string _similarityKey;
+
+    public Quiz(KanaChoiceSource[] kanaChoiceSources)
+    {
+        for (var i = 0; i < MaxAttempts; i++)
+        {
+            QuizType type = GetRandomQuizType();
+            GenerateInternal(type, kanaChoiceSources);
+            if (!RecentKeys.Contains(_similarityKey))
+            {
+                break;
+            }
+        }
+
+        Remember(_similarityKey);
+    }
+
+    private void GenerateInternal(QuizType type, KanaChoiceSource[] kanaChoiceSources)
     {
         switch (type)
         {
@@ -65,7 +93,9 @@ public class Quiz
 
         Question = $"{left} + {right}";
 
-
+        int a = Mathf.Min(left, right);
+        int b = Mathf.Max(left, right);
+        _similarityKey = $"addition:{a}+{b}";
         int wrongAnswer;
         do
         {
@@ -104,6 +134,7 @@ public class Quiz
         };
 
         string row = rows[Random.Range(0, rows.Length)];
+        _similarityKey = $"kana_fill:{row}";
 
         int missingIndex = Random.Range(1, row.Length);
 
@@ -140,6 +171,7 @@ public class Quiz
     private void GenerateGuessNumberQuiz()
     {
         ItemNum = Random.Range(1, 11);
+        _similarityKey = $"guess_number:{ItemNum}";
 
         Question = "なんこある？";
 
@@ -166,13 +198,14 @@ public class Quiz
     private void GenerateKanaChoiceQuiz(KanaChoiceSource[] sources)
     {
         KanaChoiceSource source = sources[Random.Range(0, sources.Length)];
+        _similarityKey = $"kana_choice:{source.word}";
 
         var correctKana = source.word[0].ToString();
 
         Question = "□" + source.word[1..];
         Image = source.sprite;
 
-        string wrongKana;
+        string wrongKana;   
         do
         {
             KanaChoiceSource wrongSource = sources[Random.Range(0, sources.Length)];

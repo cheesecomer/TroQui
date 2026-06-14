@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class QuizManager : MonoBehaviour
@@ -9,11 +10,21 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private float firstQuestionDelay = 1f;
     [SerializeField] private float nextQuestionDelay = 0.5f;
 
-    [Header("Question")] [SerializeField] private GameObject questionPanel;
-
-    [SerializeField] private TMP_Text questionText;
-    [SerializeField] private TMP_Text leftChoiceText;
+    [Header("Choices")] [SerializeField] private TMP_Text leftChoiceText;
     [SerializeField] private TMP_Text rightChoiceText;
+
+    [Header("Question")] [SerializeField] private GameObject questionPanel;
+    [SerializeField] private TMP_Text questionText;
+
+    [Header("Guess Number")] [SerializeField]
+    private GuessNumberPanel guessNumberPanel;
+
+    [Header("Kana Choice")] [SerializeField]
+    private GameObject kanaChoicePanel;
+
+    [SerializeField] private TMP_Text kanaChoiceQuestionText;
+    [SerializeField] private Image kanaChoiceQuestionImage;
+    [SerializeField] private KanaChoiceSource[] kanaChoiceQuestions;
 
     [Header("Status")] [SerializeField] private TMP_Text countdownText;
 
@@ -40,23 +51,17 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private GameObject cave;
     [SerializeField] private GameObject rail;
     [SerializeField] private GameObject retryButton;
-
-    [Header("Guess Number")] [SerializeField]
-    private GuessNumberPanel guessNumberPanel;
-
-    [Header("Kana Choice")] [SerializeField]
-    private GameObject kanaChoicePanel;
-
-    [SerializeField] private TMP_Text kanaChoiceQuestionText;
-    [SerializeField] private Image kanaChoiceQuestionImage;
-    [SerializeField] private KanaChoiceSource[] kanaChoiceQuestions;
-
-    [Header("Audio")] [SerializeField] private AudioSource audioSource;
+    [Header("SE")]
+    [FormerlySerializedAs("audioSource")]
+    [SerializeField] private AudioSource seAudioSource;
 
     [SerializeField] private AudioClip correctSe;
     [SerializeField] private AudioClip wrongSe;
     [SerializeField] private AudioClip gameOverSe;
 
+    [Header("BGM")]
+    [SerializeField] private AudioSource bgm;
+    
     [Header("On Back Button Press")] [SerializeField]
     private GameObject pauseDialog;
 
@@ -194,17 +199,17 @@ public class QuizManager : MonoBehaviour
         leftChoiceText.gameObject.SetActive(false);
         rightChoiceText.gameObject.SetActive(false);
         countdownText.gameObject.SetActive(false);
+        guessNumberPanel.gameObject.SetActive(false);
+        kanaChoicePanel.SetActive(false);
+        questionPanel.SetActive(false);
 
         if (_quiz.Type == Quiz.QuizType.GuessNumber)
         {
             guessNumberPanel.ShowItems(_quiz.ItemNum);
-            questionPanel.SetActive(false);
             guessNumberPanel.gameObject.SetActive(true);
         }
         else if (_quiz.Type == Quiz.QuizType.KanaChoice)
         {
-            questionPanel.SetActive(false);
-            guessNumberPanel.gameObject.SetActive(false);
             kanaChoicePanel.SetActive(true);
 
             kanaChoiceQuestionText.text = _quiz.Question;
@@ -213,8 +218,6 @@ public class QuizManager : MonoBehaviour
         else
         {
             questionPanel.SetActive(true);
-            guessNumberPanel.gameObject.SetActive(false);
-            kanaChoicePanel.SetActive(false);
         }
 
         UpdateStatus();
@@ -271,7 +274,7 @@ public class QuizManager : MonoBehaviour
         if (isCorrect)
         {
             ShowResultMark(circleMark);
-            audioSource.PlayOneShot(correctSe);
+            seAudioSource.PlayOneShot(correctSe);
             _state = QuizState.Correct;
             _timer = 0.5f;
         }
@@ -279,7 +282,7 @@ public class QuizManager : MonoBehaviour
         {
             _life--;
             ShowResultMark(crossMark);
-            audioSource.PlayOneShot(wrongSe);
+            seAudioSource.PlayOneShot(wrongSe);
             _state = QuizState.Wrong;
             _timer = 0.8f;
         }
@@ -292,8 +295,10 @@ public class QuizManager : MonoBehaviour
         _state = QuizState.GameOver;
 
         yield return StartCoroutine(DerailAnimation());
+        
+        bgm.Stop();
 
-        audioSource.PlayOneShot(gameOverSe);
+        seAudioSource.PlayOneShot(gameOverSe);
 
         retryButton.SetActive(true);
         scoreResultText.gameObject.SetActive(true);

@@ -43,7 +43,7 @@ public class EndlessScrollBackground : MonoBehaviour
         bg.anchorMin = new Vector2(0.5f, 0.5f);
         bg.anchorMax = new Vector2(0.5f, 0.5f);
         bg.sizeDelta = new Vector2(_width, viewport.rect.height);
-        bg.anchoredPosition = new Vector2(x, 0);    
+        bg.anchoredPosition = new Vector2(x, 0);
     }
 
     private void Move(RectTransform bg)
