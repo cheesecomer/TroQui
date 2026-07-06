@@ -113,13 +113,13 @@ TextureImporter:
       name: NamePlate_0
       rect:
         serializedVersion: 2
-        x: 212
-        y: 393
-        width: 1111
-        height: 234
+        x: 86
+        y: 328
+        width: 1341
+        height: 383
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 33, y: 32, z: 33, w: 28}
+      border: {x: 154, y: 32, z: 145, w: 28}
       customData: 
       outline: []
       physicsShape: []

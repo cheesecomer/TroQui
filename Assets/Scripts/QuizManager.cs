@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Linq;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +11,17 @@ public class QuizManager : MonoBehaviour
 {
     [SerializeField] private float firstQuestionDelay = 1f;
     [SerializeField] private float nextQuestionDelay = 0.5f;
+    
+    [RequireInterface(typeof(IStoppable))]
+    [SerializeField] private MonoBehaviour[] stoppables;
+    
+    [Header("Voice")]
+    [SerializeField] private VoiceDatabase voiceDatabase;
 
+    [Header("Sprite")]
+    [SerializeField]
+    private SpriteDatabase spriteDb;
+    
     [Header("Choices")] [SerializeField] private TMP_Text leftChoiceText;
     [SerializeField] private TMP_Text rightChoiceText;
 
@@ -24,7 +36,6 @@ public class QuizManager : MonoBehaviour
 
     [SerializeField] private TMP_Text kanaChoiceQuestionText;
     [SerializeField] private Image kanaChoiceQuestionImage;
-    [SerializeField] private KanaChoiceSource[] kanaChoiceQuestions;
 
     [Header("Status")] [SerializeField] private TMP_Text countdownText;
 
@@ -37,19 +48,24 @@ public class QuizManager : MonoBehaviour
 
     [SerializeField] private Color highlightColor = Color.yellow;
 
-    [Header("Cart")] [SerializeField] private RectTransform cartTransform;
+    [Header("Cart")] [SerializeField] private Transform cartTransform;
 
     [SerializeField] private float tiltThreshold = 0.25f;
-    [SerializeField] private float cartMaxAngle = 30f;
-
+    // [SerializeField] private float cartMaxAngle = 30f;
+    
+    [SerializeField] private SpriteRenderer girl;
+    [SerializeField] private Sprite normalSprite;
+    [SerializeField] private Sprite leftSprite;
+    [SerializeField] private Sprite rightSprite;
+    [SerializeField] private Sprite correctSprite;
+    [SerializeField] private Sprite wrongSprite;
+    
     [Header("Result Marks")] [SerializeField]
     private GameObject circleMark;
 
     [SerializeField] private GameObject crossMark;
     [SerializeField] private float resultFadeTime = 0.25f;
-
-    [SerializeField] private GameObject cave;
-    [SerializeField] private GameObject rail;
+    
     [SerializeField] private GameObject retryButton;
     [Header("SE")]
     [FormerlySerializedAs("audioSource")]
@@ -61,6 +77,9 @@ public class QuizManager : MonoBehaviour
 
     [Header("BGM")]
     [SerializeField] private AudioSource bgm;
+    
+    [Header("Voice")]
+    [SerializeField] private AudioSource voiceAudioSource;
     
     [Header("On Back Button Press")] [SerializeField]
     private GameObject pauseDialog;
@@ -101,7 +120,6 @@ public class QuizManager : MonoBehaviour
         _leftChoiceTextFontSize = leftChoiceText.fontSize;
         _rightChoiceTextFontSize = rightChoiceText.fontSize;
         WaitNextQuestion(firstQuestionDelay);
-        // StartCoroutine(DerailAnimation());
     }
 
     private void Update()
@@ -119,7 +137,10 @@ public class QuizManager : MonoBehaviour
         switch (_state)
         {
             case QuizState.WaitingNextQuestion:
-                if (_timer <= 0f) StartQuestion();
+                if (_timer <= 0f) StartCoroutine(StartQuestion());
+                break;
+            
+            case QuizState.PlayingVoice:
                 break;
             case QuizState.QuestionIntro:
                 if (_timer <= 0f) ShowLeftChoice();
@@ -179,13 +200,12 @@ public class QuizManager : MonoBehaviour
         HideResultMarksImmediate();
     }
 
-    private void StartQuestion()
+    private IEnumerator StartQuestion()
     {
         HideResultMarksImmediate();
-        _state = QuizState.QuestionIntro;
-        _timer = 1.5f;
+        _state = QuizState.PlayingVoice;
         _selectedSide = null;
-        _quiz = new Quiz(kanaChoiceQuestions);
+        _quiz = new Quiz(spriteDb.kanaChoiceSources, voiceDatabase);
         _score++;
 
         cartTransform.localRotation = Quaternion.Euler(0, 0, 0);
@@ -196,6 +216,7 @@ public class QuizManager : MonoBehaviour
         leftChoiceText.text = _quiz.Left;
         rightChoiceText.text = _quiz.Right;
 
+        girl.sprite = normalSprite;
         leftChoiceText.gameObject.SetActive(false);
         rightChoiceText.gameObject.SetActive(false);
         countdownText.gameObject.SetActive(false);
@@ -219,9 +240,20 @@ public class QuizManager : MonoBehaviour
         {
             questionPanel.SetActive(true);
         }
+        
+        foreach (var sequence in _quiz.VoiceSequences)
+        {
+            voiceAudioSource.PlayOneShot(sequence.clip);
+            yield return new WaitForSeconds(
+                sequence.clip.length + sequence.delay
+            );
+        }
 
         UpdateStatus();
         UpdateHighlight();
+
+        _state = QuizState.QuestionIntro;
+        _timer = _quiz.VoiceSequences.Length >  0 ? 0.2f : 1.5f;
     }
 
     private void ShowRightChoice()
@@ -251,13 +283,21 @@ public class QuizManager : MonoBehaviour
 
     private void UpdateTilt()
     {
+#if UNITY_EDITOR
+        float x = Input.GetAxisRaw("Horizontal"); // ←→ または A/D
+        if (x == 0 && _selectedSide != null)
+        {
+            x = _selectedSide == Quiz.Side.Left ? -1 : 1;
+        }
+#else
         float x = Input.acceleration.x;
+#endif
 
         if (x < -tiltThreshold) _selectedSide = Quiz.Side.Left;
         else if (x > tiltThreshold) _selectedSide = Quiz.Side.Right;
         else _selectedSide = null;
 
-        cartTransform.localRotation = Quaternion.Euler(0, 0, -x * cartMaxAngle);
+        // cartTransform.localRotation = Quaternion.Euler(0, 0, -x * cartMaxAngle);
 
         UpdateHighlight();
     }
@@ -274,6 +314,7 @@ public class QuizManager : MonoBehaviour
         if (isCorrect)
         {
             ShowResultMark(circleMark);
+            girl.sprite = correctSprite;
             seAudioSource.PlayOneShot(correctSe);
             _state = QuizState.Correct;
             _timer = 0.5f;
@@ -282,6 +323,7 @@ public class QuizManager : MonoBehaviour
         {
             _life--;
             ShowResultMark(crossMark);
+            girl.sprite = wrongSprite;
             seAudioSource.PlayOneShot(wrongSe);
             _state = QuizState.Wrong;
             _timer = 0.8f;
@@ -293,6 +335,14 @@ public class QuizManager : MonoBehaviour
     private IEnumerator ShowGameOver()
     {
         _state = QuizState.GameOver;
+        
+        guessNumberPanel.gameObject.SetActive(false);
+        kanaChoicePanel.SetActive(false);
+        questionPanel.SetActive(false);
+        questionText.gameObject.SetActive(false);
+        leftChoiceText.gameObject.SetActive(false);
+        rightChoiceText.gameObject.SetActive(false);
+        countdownText.gameObject.SetActive(false);
 
         yield return StartCoroutine(DerailAnimation());
         
@@ -312,11 +362,6 @@ public class QuizManager : MonoBehaviour
 
         questionText.gameObject.SetActive(true);
         questionPanel.SetActive(true);
-        guessNumberPanel.gameObject.SetActive(false);
-        leftChoiceText.gameObject.SetActive(false);
-        rightChoiceText.gameObject.SetActive(false);
-        countdownText.gameObject.SetActive(false);
-        scoreText.gameObject.SetActive(false);
     }
 
     private float GetTimeLimit()
@@ -347,6 +392,13 @@ public class QuizManager : MonoBehaviour
             _selectedSide == Quiz.Side.Right
                 ? _rightChoiceTextFontSize * 1.2f
                 : _rightChoiceTextFontSize;
+
+        girl.sprite =　_selectedSide switch
+        {
+            Quiz.Side.Left => leftSprite,
+            Quiz.Side.Right => rightSprite,
+            _ => normalSprite
+        };
     }
 
     private void ShowResultMark(GameObject mark)
@@ -410,13 +462,13 @@ public class QuizManager : MonoBehaviour
         Vector3 startPos = cartTransform.localPosition;
 
         // ガタン！と跳ねる
-        cartTransform.localPosition = startPos + new Vector3(0, 30, 0);
+        cartTransform.localPosition = startPos + new Vector3(0, 0.5f, 0);
         yield return new WaitForSeconds(0.05f);
 
-        cartTransform.localPosition = startPos + new Vector3(0, 70, 0);
+        cartTransform.localPosition = startPos + new Vector3(0, 1.0f, 0);
         yield return new WaitForSeconds(0.05f);
 
-        cartTransform.localPosition = startPos + new Vector3(0, 100, 0);
+        cartTransform.localPosition = startPos + new Vector3(0, 1.5f, 0);
         yield return new WaitForSeconds(0.1f);
 
         // 左に傾き始める
@@ -424,28 +476,30 @@ public class QuizManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         cartTransform.localRotation = Quaternion.Euler(0, 0, -15);
-        cartTransform.localPosition = startPos + new Vector3(-10, 100, 0);
+        cartTransform.localPosition = startPos + new Vector3(0.5f, 1.5f, 0);
         yield return new WaitForSeconds(0.1f);
 
-        cartTransform.localPosition = startPos + new Vector3(-10, 30, 0);
+        cartTransform.localPosition = startPos + new Vector3(0.50f, 0.5f, 0);
         yield return new WaitForSeconds(0.1f);
 
         // 脱輪
         cartTransform.localRotation = Quaternion.Euler(0, 0, -30);
         cartTransform.localPosition =
-            startPos + new Vector3(-10, -10, 0);
+            startPos + new Vector3(0.5f, -0.10f, 0);
 
         yield return new WaitForSeconds(0.1f);
 
         // 最後に少し沈む
         cartTransform.localPosition =
-            startPos + new Vector3(20, -20, 0);
+            startPos + new Vector3(0.5f, -0.20f, 0);
 
         cartTransform.localRotation =
             Quaternion.Euler(0, 0, -10);
 
-        cave.GetComponent<CaveAnimation>().enabled = false;
-        rail.GetComponent<RailScroller>().enabled = false;
+        foreach (MonoBehaviour stoppable in stoppables)
+        {
+            (stoppable as IStoppable)?.Stop();
+        }
 
         yield return new WaitForSeconds(1f);
     }
@@ -527,6 +581,7 @@ public class QuizManager : MonoBehaviour
     private enum QuizState
     {
         WaitingNextQuestion,
+        PlayingVoice,
         QuestionIntro,
         ShowLeftChoice,
         ShowRightChoice,

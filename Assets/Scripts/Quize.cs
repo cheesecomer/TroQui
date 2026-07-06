@@ -35,12 +35,12 @@ public class Quiz
 
     private string _similarityKey;
 
-    public Quiz(KanaChoiceSource[] kanaChoiceSources)
+    public Quiz(KanaChoiceSource[] kanaChoiceSources, VoiceDatabase voiceDatabase)
     {
         for (var i = 0; i < MaxAttempts; i++)
         {
             QuizType type = GetRandomQuizType();
-            GenerateInternal(type, kanaChoiceSources);
+            GenerateInternal(type, kanaChoiceSources, voiceDatabase);
             if (!RecentKeys.Contains(_similarityKey))
             {
                 break;
@@ -50,21 +50,21 @@ public class Quiz
         Remember(_similarityKey);
     }
 
-    private void GenerateInternal(QuizType type, KanaChoiceSource[] kanaChoiceSources)
+    private void GenerateInternal(QuizType type, KanaChoiceSource[] kanaChoiceSources, VoiceDatabase voiceDatabase)
     {
         switch (type)
         {
             case QuizType.Addition:
-                GenerateAdditionQuiz();
+                GenerateAdditionQuiz(voiceDatabase);
                 break;
             case QuizType.KanaFill:
-                GenerateKanaFillQuiz();
+                GenerateKanaFillQuiz(voiceDatabase);
                 break;
             case QuizType.GuessNumber:
-                GenerateGuessNumberQuiz();
+                GenerateGuessNumberQuiz(voiceDatabase);
                 break;
             case QuizType.KanaChoice:
-                GenerateKanaChoiceQuiz(kanaChoiceSources);
+                GenerateKanaChoiceQuiz(kanaChoiceSources, voiceDatabase);
                 break;
         }
 
@@ -78,6 +78,7 @@ public class Quiz
     public QuizType Type { get; private set; }
     public int ItemNum { get; private set; }
     public Sprite Image { get; private set; }
+    public VoiceSequence[] VoiceSequences { get; private set; }
 
     private static QuizType GetRandomQuizType()
     {
@@ -85,13 +86,14 @@ public class Quiz
         return values[Random.Range(0, values.Length)];
     }
 
-    private void GenerateAdditionQuiz()
+    private void GenerateAdditionQuiz(VoiceDatabase voiceDatabase)
     {
         int left = Random.Range(1, 5 + 1);
         int right = Random.Range(1, 5 + 1);
         int answer = left + right; // 2～10
 
         Question = $"{left} + {right}";
+        VoiceSequences = voiceDatabase.GetAdditionVoice(left, right);
 
         int a = Mathf.Min(left, right);
         int b = Mathf.Max(left, right);
@@ -117,7 +119,7 @@ public class Quiz
         }
     }
 
-    private void GenerateKanaFillQuiz()
+    private void GenerateKanaFillQuiz(VoiceDatabase voiceDatabase)
     {
         string[] rows =
         {
@@ -144,6 +146,7 @@ public class Quiz
         chars[missingIndex] = '□';
 
         Question = new string(chars);
+        VoiceSequences = voiceDatabase.GetKanaVoice(correctKana);
 
         char wrongKana;
         do
@@ -168,12 +171,13 @@ public class Quiz
         }
     }
 
-    private void GenerateGuessNumberQuiz()
+    private void GenerateGuessNumberQuiz(VoiceDatabase voiceDatabase)
     {
         ItemNum = Random.Range(1, 11);
         _similarityKey = $"guess_number:{ItemNum}";
 
         Question = "なんこある？";
+        VoiceSequences = voiceDatabase.GuessNumberVoice;
 
         int wrongAnswer;
         do
@@ -195,21 +199,22 @@ public class Quiz
         }
     }
 
-    private void GenerateKanaChoiceQuiz(KanaChoiceSource[] sources)
+    private void GenerateKanaChoiceQuiz(KanaChoiceSource[] sources, VoiceDatabase voiceDatabase)
     {
         KanaChoiceSource source = sources[Random.Range(0, sources.Length)];
-        _similarityKey = $"kana_choice:{source.word}";
+        _similarityKey = $"kana_choice:{source.vocabulary.ToText()}";
 
-        var correctKana = source.word[0].ToString();
+        var correctKana = source.vocabulary.ToText()[0].ToString();
 
-        Question = "□" + source.word[1..];
+        Question = "□" + source.vocabulary.ToText()[1..];
         Image = source.sprite;
+        VoiceSequences = voiceDatabase.GetKanaChoiceVoice(source.vocabulary);
 
         string wrongKana;   
         do
         {
             KanaChoiceSource wrongSource = sources[Random.Range(0, sources.Length)];
-            wrongKana = wrongSource.word[0].ToString();
+            wrongKana = wrongSource.vocabulary.ToText()[0].ToString();
         } while (wrongKana == correctKana);
 
         if (Random.value < 0.5f)

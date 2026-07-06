@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e0f13bfe7a544ae4aa01e83bd6f25dd, type: 3}
+  m_Name: SpriteDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteDatabase
+  grasses:
+  - {fileID: 1056229282, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: -1501113983, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: 537424972, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: 1194013945, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: 2003965952, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: -1138521859, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: -1705356210, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: -1191152812, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: -431321249, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: -596963984, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: -1559984346, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  - {fileID: -1403426093, guid: b61ee9b737fed47979c4faa1d901f008, type: 3}
+  flowers:
+  - {fileID: 895823537, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: -765169969, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: 1674337561, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: 1352440927, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: 208134244, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: -1935162690, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: -324116562, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: 1570857, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: -1137609888, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: -1848444901, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: 1362303383, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: 28140407, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: 374272229, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: 1224185472, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: 368300320, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  - {fileID: -1533092187, guid: f632207dd7f44434abfdce83b748efc0, type: 3}
+  trees:
+  - {fileID: -126103118, guid: b8553dc2091484d29ad574c02ca571a1, type: 3}
+  - {fileID: -1295909505, guid: b8553dc2091484d29ad574c02ca571a1, type: 3}
+  - {fileID: 644855455, guid: b8553dc2091484d29ad574c02ca571a1, type: 3}
+  - {fileID: 863591330, guid: b8553dc2091484d29ad574c02ca571a1, type: 3}
+  clouds:
+  - {fileID: 1235684495, guid: e7b6d0851330a4729b036241aa5483d1, type: 3}
+  - {fileID: 1598291214, guid: e7b6d0851330a4729b036241aa5483d1, type: 3}
+  - {fileID: 270493207, guid: e7b6d0851330a4729b036241aa5483d1, type: 3}
+  - {fileID: 1479995795, guid: e7b6d0851330a4729b036241aa5483d1, type: 3}
+  - {fileID: 1280550881, guid: e7b6d0851330a4729b036241aa5483d1, type: 3}
+  - {fileID: 698746828, guid: e7b6d0851330a4729b036241aa5483d1, type: 3}
+  - {fileID: -992315321, guid: e7b6d0851330a4729b036241aa5483d1, type: 3}
+  - {fileID: 268311065, guid: e7b6d0851330a4729b036241aa5483d1, type: 3}
+  - {fileID: 290305388, guid: e7b6d0851330a4729b036241aa5483d1, type: 3}
+  kanaChoiceSources:
+  - vocabulary: 0
+    sprite: {fileID: 21300000, guid: f4e8ba726cd0f417aa00cbe8a3f00f43, type: 3}
+  - vocabulary: 1
+    sprite: {fileID: 21300000, guid: e95324b86a61f497eae7ca40b04283ce, type: 3}
+  - vocabulary: 2
+    sprite: {fileID: 21300000, guid: dbc27f6aa6de4483eb41d223bec420ef, type: 3}
+  - vocabulary: 3
+    sprite: {fileID: 21300000, guid: 491fb7d70a3ec4354912e91d9d3ae600, type: 3}
+  - vocabulary: 4
+    sprite: {fileID: 21300000, guid: 50804095056c74a6c8852ba9b3fda38e, type: 3}
+  - vocabulary: 5
+    sprite: {fileID: 21300000, guid: cb57a193a9192491d981d18cc24874bd, type: 3}
+  - vocabulary: 6
+    sprite: {fileID: 21300000, guid: 0bc1ea5520ea64d3e81cc20460b17884, type: 3}
+  - vocabulary: 7
+    sprite: {fileID: 21300000, guid: c436e7d82b0dc4d0189a10a0f7473792, type: 3}
+  - vocabulary: 8
+    sprite: {fileID: 21300000, guid: b92703bc925d84352873bdfc43f38417, type: 3}
+  - vocabulary: 9
+    sprite: {fileID: 21300000, guid: 91625e9aaff9c41e19bf452e84e816e1, type: 3}
+  - vocabulary: 10
+    sprite: {fileID: 21300000, guid: 3616cf58fbb9343e8b9c0b27c4fdaa4d, type: 3}
+  - vocabulary: 11
+    sprite: {fileID: 21300000, guid: 96c8a985e01494860bb7b245947a7d95, type: 3}
+  - vocabulary: 12
+    sprite: {fileID: 21300000, guid: 69bc684c060b841e881865af700bfe15, type: 3}
+  - vocabulary: 13
+    sprite: {fileID: 21300000, guid: d1ef25e8b980843fcaf3029954a4b4cd, type: 3}
+  - vocabulary: 14
+    sprite: {fileID: 21300000, guid: 562652a20fbb9440f9270a09d5bfb664, type: 3}
+  - vocabulary: 15
+    sprite: {fileID: 21300000, guid: 2fcb722efd1f8448e9ab2c99d4f794d6, type: 3}
+  - vocabulary: 16
+    sprite: {fileID: 21300000, guid: 4e33525c8cdfc436b93f1d04e252ab8e, type: 3}
+  - vocabulary: 17
+    sprite: {fileID: 21300000, guid: c240d1fab9628489c875fb2331003cbd, type: 3}
+  - vocabulary: 18
+    sprite: {fileID: 21300000, guid: ab44b5bffa2784568b995c1ae2238521, type: 3}
+  - vocabulary: 19
+    sprite: {fileID: 21300000, guid: ba204323dcde04f20b6b58647eff5748, type: 3}
+  - vocabulary: 20
+    sprite: {fileID: 21300000, guid: 78f34f4a0e55f4a948fbd67d6cf980dc, type: 3}
+  - vocabulary: 21
+    sprite: {fileID: 21300000, guid: d4ee5e7fdadfe45fa9874273e411b1d1, type: 3}
+  - vocabulary: 22
+    sprite: {fileID: 21300000, guid: f4b1140c851a84ad4a8f631dbb245a11, type: 3}
+  - vocabulary: 23
+    sprite: {fileID: 21300000, guid: d9c886c7c8d614a41942ebe8123e3b3f, type: 3}
+  - vocabulary: 24
+    sprite: {fileID: 21300000, guid: 50799ebdb9f8a432a85a7ea053dd8757, type: 3}
+  - vocabulary: 25
+    sprite: {fileID: 21300000, guid: 6cf360db9fc0649b5909fab5e80c8f4d, type: 3}
+  - vocabulary: 26
+    sprite: {fileID: 21300000, guid: ff823effea283403ea2a8251b1457c74, type: 3}
+  - vocabulary: 27
+    sprite: {fileID: 21300000, guid: 55d18a2ff2e114212874eab81a8b4688, type: 3}
+  - vocabulary: 28
+    sprite: {fileID: 21300000, guid: 8ffd1ab75a50a458b89ded7a523f2ae1, type: 3}
+  - vocabulary: 29
+    sprite: {fileID: 21300000, guid: a27799e6ab07a4ff69b66f8a8bacfc0e, type: 3}
+  - vocabulary: 30
+    sprite: {fileID: 21300000, guid: aacc118920a5745ac87bab1ea48518a9, type: 3}
+  - vocabulary: 31
+    sprite: {fileID: 21300000, guid: 808533b7e2e9c427e9ec2c1256099a4f, type: 3}
+  - vocabulary: 32
+    sprite: {fileID: 21300000, guid: 077815af9f7cc46319bd6fb06d5f3b63, type: 3}
+  - vocabulary: 33
+    sprite: {fileID: 21300000, guid: a14e4d1752c294f98aff7ea2bcc41a65, type: 3}
+  - vocabulary: 34
+    sprite: {fileID: 21300000, guid: a615a01ea093a46968e3229d941112b0, type: 3}
+  - vocabulary: 35
+    sprite: {fileID: 21300000, guid: 10f8566dc53ff43eb92f4b2fc9be1a4e, type: 3}
+  - vocabulary: 36
+    sprite: {fileID: 21300000, guid: 6740f118d941f4f1cae5d5a0b2fbf86b, type: 3}
+  - vocabulary: 37
+    sprite: {fileID: 21300000, guid: 35f3e4cb55dd24c9ca0f918ca1097cac, type: 3}
+  - vocabulary: 38
+    sprite: {fileID: 21300000, guid: 35520d6aa13f34a959fd40e9bac26354, type: 3}
+  - vocabulary: 39
+    sprite: {fileID: 21300000, guid: 7e082fa33261b4fe38bdb291d2e1abfa, type: 3}
+  - vocabulary: 40
+    sprite: {fileID: 21300000, guid: 7d3902200e87e49368f32b5bece00a10, type: 3}
+  - vocabulary: 41
+    sprite: {fileID: 21300000, guid: c293da82837a64758aab1456371e080a, type: 3}
+  - vocabulary: 42
+    sprite: {fileID: 21300000, guid: 0d7c2dc3a9ff74835b41449ec8511a00, type: 3}

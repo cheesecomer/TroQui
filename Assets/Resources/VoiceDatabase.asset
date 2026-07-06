@@ -1,0 +1,593 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2071e11b786e1452aabfa42269f247c4, type: 3}
+  m_Name: VoiceDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::VoiceDatabase
+  guessNumberVoice:
+  - clip: {fileID: 8300000, guid: 8fdf930e423e44f15b7ee41c04079ed1, type: 3}
+    delay: 0
+  additionVoices:
+  - left: 1
+    right: 1
+    voices:
+    - clip: {fileID: 8300000, guid: 2d47a4f5026b94c58b60e8f7a2e193fe, type: 3}
+      delay: 0
+  - left: 1
+    right: 2
+    voices:
+    - clip: {fileID: 8300000, guid: d3fe30a887def459882048d9c9f4d54a, type: 3}
+      delay: 0
+  - left: 1
+    right: 3
+    voices:
+    - clip: {fileID: 8300000, guid: 474b1327763ef46d4b7b52e5bb89e670, type: 3}
+      delay: 0
+  - left: 1
+    right: 4
+    voices:
+    - clip: {fileID: 8300000, guid: f42fc0c90c2ad4c12a2259eaddf0cee5, type: 3}
+      delay: 0
+  - left: 1
+    right: 5
+    voices:
+    - clip: {fileID: 8300000, guid: b48b8387663004fb5a4b355dfe09d1ed, type: 3}
+      delay: 0
+  - left: 2
+    right: 1
+    voices:
+    - clip: {fileID: 8300000, guid: 2765b1d4cf20f46ffb058e073cfbcc95, type: 3}
+      delay: 0
+  - left: 2
+    right: 2
+    voices:
+    - clip: {fileID: 8300000, guid: c7fa65770238f4b8bbaea731a2aa2e71, type: 3}
+      delay: 0
+  - left: 2
+    right: 3
+    voices:
+    - clip: {fileID: 8300000, guid: 07055598e6c78498aac9e4d07061dbf8, type: 3}
+      delay: 0
+  - left: 2
+    right: 4
+    voices:
+    - clip: {fileID: 8300000, guid: 0c8f9ac7f9e424638bda79f7057ff8ee, type: 3}
+      delay: 0
+  - left: 2
+    right: 5
+    voices:
+    - clip: {fileID: 8300000, guid: b59ebd89bb62d4d80a7714e0dd5bd3c5, type: 3}
+      delay: 0
+  - left: 3
+    right: 1
+    voices:
+    - clip: {fileID: 8300000, guid: 27f261bf042544cb69e48da540f0d012, type: 3}
+      delay: 0
+  - left: 3
+    right: 2
+    voices:
+    - clip: {fileID: 8300000, guid: 70ba24aa0926d4a32be6001a2b8c7820, type: 3}
+      delay: 0
+  - left: 3
+    right: 3
+    voices:
+    - clip: {fileID: 8300000, guid: 062b64491fc3d4e57be2e300e79d747c, type: 3}
+      delay: 0
+  - left: 3
+    right: 4
+    voices:
+    - clip: {fileID: 8300000, guid: 17318ccf0340046eb8e54224de585461, type: 3}
+      delay: 0
+  - left: 3
+    right: 5
+    voices:
+    - clip: {fileID: 8300000, guid: f9457da96691e4a58a2cb5f4cf8a0675, type: 3}
+      delay: 0
+  - left: 4
+    right: 1
+    voices:
+    - clip: {fileID: 8300000, guid: 82252aeda0a26464aaed128ec9dba0a0, type: 3}
+      delay: 0
+  - left: 4
+    right: 2
+    voices:
+    - clip: {fileID: 8300000, guid: 484c9ea707b28477ba80d1f4cdad8479, type: 3}
+      delay: 0
+  - left: 4
+    right: 3
+    voices:
+    - clip: {fileID: 8300000, guid: 75dfe3da7e84f4cc8a19c6c80f939cc8, type: 3}
+      delay: 0
+  - left: 4
+    right: 4
+    voices:
+    - clip: {fileID: 8300000, guid: e0c79c3bc213f4e959364f8b7f2fb11b, type: 3}
+      delay: 0
+  - left: 4
+    right: 5
+    voices:
+    - clip: {fileID: 8300000, guid: 899615528b5fa4b3fbd605eb62afb84e, type: 3}
+      delay: 0
+  - left: 5
+    right: 1
+    voices:
+    - clip: {fileID: 8300000, guid: a10980e55b33f44b4ad919d71be49feb, type: 3}
+      delay: 0
+  - left: 5
+    right: 2
+    voices:
+    - clip: {fileID: 8300000, guid: 77272019d0d91441da2b57b47a6ab437, type: 3}
+      delay: 0
+  - left: 5
+    right: 3
+    voices:
+    - clip: {fileID: 8300000, guid: 41c68e7926f1e47e79626bd54f28e8f5, type: 3}
+      delay: 0
+  - left: 5
+    right: 4
+    voices:
+    - clip: {fileID: 8300000, guid: cc867e3bb2d2f4c1494937ba8a81bf7f, type: 3}
+      delay: 0
+  - left: 5
+    right: 5
+    voices:
+    - clip: {fileID: 8300000, guid: 3254ec4cdc69d4242940dd373314bcc4, type: 3}
+      delay: 0
+  kanaVoices:
+  - kana: 12354
+    voices:
+    - clip: {fileID: 8300000, guid: bc0efc773d7dc4b9db2ce07ba1996fee, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: c24ea0cf2a936475eacd56c65d0585dc, type: 3}
+      delay: 0
+  - kana: 12356
+    voices:
+    - clip: {fileID: 8300000, guid: bc0efc773d7dc4b9db2ce07ba1996fee, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 8dc5100cd6a434e88a35fcebc775d6d0, type: 3}
+      delay: 0
+  - kana: 12358
+    voices:
+    - clip: {fileID: 8300000, guid: bc0efc773d7dc4b9db2ce07ba1996fee, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 6b17093503c8a44e1ae793e68d6efb15, type: 3}
+      delay: 0
+  - kana: 12360
+    voices:
+    - clip: {fileID: 8300000, guid: bc0efc773d7dc4b9db2ce07ba1996fee, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 1587ef18a6297477baa319a4703a2626, type: 3}
+      delay: 0
+  - kana: 12362
+    voices:
+    - clip: {fileID: 8300000, guid: bc0efc773d7dc4b9db2ce07ba1996fee, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 5eccbade77ed24218b7ef1e734f48d46, type: 3}
+      delay: 0
+  - kana: 12363
+    voices:
+    - clip: {fileID: 8300000, guid: dd130396b18e04e3b9b42cce8e670a43, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: b0cb7095b5b87445a827346c495135dc, type: 3}
+      delay: 0
+  - kana: 12365
+    voices:
+    - clip: {fileID: 8300000, guid: dd130396b18e04e3b9b42cce8e670a43, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 227789a92ad554190a552ffa56cb1598, type: 3}
+      delay: 0
+  - kana: 12367
+    voices:
+    - clip: {fileID: 8300000, guid: dd130396b18e04e3b9b42cce8e670a43, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 9e6cc85793cb74b07a15c54ef8251479, type: 3}
+      delay: 0
+  - kana: 12369
+    voices:
+    - clip: {fileID: 8300000, guid: dd130396b18e04e3b9b42cce8e670a43, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 16cfa85a3367b4fc8b8d7dfa016e3654, type: 3}
+      delay: 0
+  - kana: 12371
+    voices:
+    - clip: {fileID: 8300000, guid: dd130396b18e04e3b9b42cce8e670a43, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 9ccf078c052ff4070bbc568857d49559, type: 3}
+      delay: 0
+  - kana: 12373
+    voices:
+    - clip: {fileID: 8300000, guid: 585b1822924e74f93b4a12128729c2ec, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: d23b1e42ec5d3438cbe71728b5da4491, type: 3}
+      delay: 0
+  - kana: 12375
+    voices:
+    - clip: {fileID: 8300000, guid: 585b1822924e74f93b4a12128729c2ec, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 7ffb80c95c96b4582add2339afc8f470, type: 3}
+      delay: 0
+  - kana: 12377
+    voices:
+    - clip: {fileID: 8300000, guid: 585b1822924e74f93b4a12128729c2ec, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 1f299114eb3274fe0aa2596f546e8b34, type: 3}
+      delay: 0
+  - kana: 12379
+    voices:
+    - clip: {fileID: 8300000, guid: 585b1822924e74f93b4a12128729c2ec, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 4ec91f2b7445e44caaf6b7016869f9b3, type: 3}
+      delay: 0
+  - kana: 12381
+    voices:
+    - clip: {fileID: 8300000, guid: 585b1822924e74f93b4a12128729c2ec, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: ff929b133a48a4f11a83087a88529f03, type: 3}
+      delay: 0
+  - kana: 12383
+    voices:
+    - clip: {fileID: 8300000, guid: e8ad95ddc14cb4cf4a9c4d553049388d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 1bdb4f9e373c340e0b811a8c721a1030, type: 3}
+      delay: 0
+  - kana: 12385
+    voices:
+    - clip: {fileID: 8300000, guid: e8ad95ddc14cb4cf4a9c4d553049388d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: ace270454f4c644a685643db54788d04, type: 3}
+      delay: 0
+  - kana: 12388
+    voices:
+    - clip: {fileID: 8300000, guid: e8ad95ddc14cb4cf4a9c4d553049388d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 493cd8facc74543f9a000c1809fb69a2, type: 3}
+      delay: 0
+  - kana: 12390
+    voices:
+    - clip: {fileID: 8300000, guid: e8ad95ddc14cb4cf4a9c4d553049388d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 4972446386cf94b2d87d04c80482808e, type: 3}
+      delay: 0
+  - kana: 12392
+    voices:
+    - clip: {fileID: 8300000, guid: e8ad95ddc14cb4cf4a9c4d553049388d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 045e282b5cc4745f495f3c4735c20c20, type: 3}
+      delay: 0
+  - kana: 12394
+    voices:
+    - clip: {fileID: 8300000, guid: c0ce0e2a1a3d94f8ca3ef7e8b74f3224, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: c399e474ddd4c483cbb33bd31cbd569d, type: 3}
+      delay: 0
+  - kana: 12395
+    voices:
+    - clip: {fileID: 8300000, guid: c0ce0e2a1a3d94f8ca3ef7e8b74f3224, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 2b74a8e96e55446cab5bffb942e796c1, type: 3}
+      delay: 0
+  - kana: 12396
+    voices:
+    - clip: {fileID: 8300000, guid: c0ce0e2a1a3d94f8ca3ef7e8b74f3224, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 7fe6ca9905cf7443682c79b9780541ef, type: 3}
+      delay: 0
+  - kana: 12397
+    voices:
+    - clip: {fileID: 8300000, guid: c0ce0e2a1a3d94f8ca3ef7e8b74f3224, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 6d79a5d6ab1f24cb6ac75fdaa9c583bc, type: 3}
+      delay: 0
+  - kana: 12398
+    voices:
+    - clip: {fileID: 8300000, guid: c0ce0e2a1a3d94f8ca3ef7e8b74f3224, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 91c7130399e324f26b993d5f012f15e4, type: 3}
+      delay: 0
+  - kana: 12399
+    voices:
+    - clip: {fileID: 8300000, guid: 857c0c892fea0456d8f21c0d6ce7a37c, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: eb9d985d7af9241efbf7297d52c3c128, type: 3}
+      delay: 0
+  - kana: 12402
+    voices:
+    - clip: {fileID: 8300000, guid: 857c0c892fea0456d8f21c0d6ce7a37c, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 1b1cbac272cf84145a77f9b813413f9d, type: 3}
+      delay: 0
+  - kana: 12405
+    voices:
+    - clip: {fileID: 8300000, guid: 857c0c892fea0456d8f21c0d6ce7a37c, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 33b72e30efda942cf938023f170ac80f, type: 3}
+      delay: 0
+  - kana: 12408
+    voices:
+    - clip: {fileID: 8300000, guid: 857c0c892fea0456d8f21c0d6ce7a37c, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 51166828ae4fd4a15855888204ed7bea, type: 3}
+      delay: 0
+  - kana: 12411
+    voices:
+    - clip: {fileID: 8300000, guid: 857c0c892fea0456d8f21c0d6ce7a37c, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 1c7f3eae6d193445a97bd2ce088ba910, type: 3}
+      delay: 0
+  - kana: 12414
+    voices:
+    - clip: {fileID: 8300000, guid: eada77b3ff569437bbd7b55ae9df7d32, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 0fc4eda593341476ca85672790f2e696, type: 3}
+      delay: 0
+  - kana: 12415
+    voices:
+    - clip: {fileID: 8300000, guid: eada77b3ff569437bbd7b55ae9df7d32, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 1e445123a4a434a2bb09360a3978e707, type: 3}
+      delay: 0
+  - kana: 12416
+    voices:
+    - clip: {fileID: 8300000, guid: eada77b3ff569437bbd7b55ae9df7d32, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 93d8cde9ec64b406cacc3626a55c0fac, type: 3}
+      delay: 0
+  - kana: 12417
+    voices:
+    - clip: {fileID: 8300000, guid: eada77b3ff569437bbd7b55ae9df7d32, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: ca0bd82dafb2b4abd9a689be82de086f, type: 3}
+      delay: 0
+  - kana: 12418
+    voices:
+    - clip: {fileID: 8300000, guid: eada77b3ff569437bbd7b55ae9df7d32, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 09ea525481c13487a8a90afcaf272cca, type: 3}
+      delay: 0
+  - kana: 12420
+    voices:
+    - clip: {fileID: 8300000, guid: 132b6caca854140319befb005d6c5276, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 350278673ae864df792d0964f7ab0d17, type: 3}
+      delay: 0
+  - kana: 12422
+    voices:
+    - clip: {fileID: 8300000, guid: 132b6caca854140319befb005d6c5276, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 6de44932c27fd45b0973f22c8a0451aa, type: 3}
+      delay: 0
+  - kana: 12424
+    voices:
+    - clip: {fileID: 8300000, guid: 132b6caca854140319befb005d6c5276, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: fd3ea74875b794eb09e0bf8bc0f7d507, type: 3}
+      delay: 0
+  - kana: 12425
+    voices:
+    - clip: {fileID: 8300000, guid: 2f7c85b777f7942c687dcd2d9279da0d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: e81336f7ca9f84d2a8fbab8e9e503a7a, type: 3}
+      delay: 0
+  - kana: 12426
+    voices:
+    - clip: {fileID: 8300000, guid: 2f7c85b777f7942c687dcd2d9279da0d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 3f42b8d003b1045929b1f5f1f6986653, type: 3}
+      delay: 0
+  - kana: 12427
+    voices:
+    - clip: {fileID: 8300000, guid: 2f7c85b777f7942c687dcd2d9279da0d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: e6c885b6bf3194fe1bf6761157a0efd2, type: 3}
+      delay: 0
+  - kana: 12428
+    voices:
+    - clip: {fileID: 8300000, guid: 2f7c85b777f7942c687dcd2d9279da0d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 63f41063ed06d4bddafcb80999b18b8f, type: 3}
+      delay: 0
+  - kana: 12429
+    voices:
+    - clip: {fileID: 8300000, guid: 2f7c85b777f7942c687dcd2d9279da0d, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: b400dada763d84f41b8d759f6e4726c8, type: 3}
+      delay: 0
+  - kana: 12431
+    voices:
+    - clip: {fileID: 8300000, guid: 77fd6a58c975649ad911c6be342899c1, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 685962a5097fd4c8db5861a77b39394a, type: 3}
+      delay: 0
+  - kana: 12434
+    voices:
+    - clip: {fileID: 8300000, guid: 77fd6a58c975649ad911c6be342899c1, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 6c4988eed885f4a5aabae7ff4f7d52b7, type: 3}
+      delay: 0
+  - kana: 12435
+    voices:
+    - clip: {fileID: 8300000, guid: 77fd6a58c975649ad911c6be342899c1, type: 3}
+      delay: 0
+    - clip: {fileID: 8300000, guid: 3f733d1f827164ac6bf2c9e920b87c7f, type: 3}
+      delay: 0
+  kanaChoiceVoices:
+  - vocabulary: 0
+    voices:
+    - clip: {fileID: 8300000, guid: 5e53974658b9046c196fd2d2f8a6bd47, type: 3}
+      delay: 0
+  - vocabulary: 1
+    voices:
+    - clip: {fileID: 8300000, guid: b5c4f9e1520d54204a0ab3eeba809628, type: 3}
+      delay: 0
+  - vocabulary: 2
+    voices:
+    - clip: {fileID: 8300000, guid: a21b0b7f2c2424b6986fae83bd543cae, type: 3}
+      delay: 0
+  - vocabulary: 3
+    voices:
+    - clip: {fileID: 8300000, guid: c5140fe22299e4a5d84f403381cd156f, type: 3}
+      delay: 0
+  - vocabulary: 4
+    voices:
+    - clip: {fileID: 8300000, guid: 586f5ae3d88ae49d89412d7288638cd3, type: 3}
+      delay: 0
+  - vocabulary: 5
+    voices:
+    - clip: {fileID: 8300000, guid: 3081f92d8af6e42fca2512238e34f6e2, type: 3}
+      delay: 0
+  - vocabulary: 6
+    voices:
+    - clip: {fileID: 8300000, guid: c72115ebd16cc4ce9bed151f98ef979d, type: 3}
+      delay: 0
+  - vocabulary: 7
+    voices:
+    - clip: {fileID: 8300000, guid: fe044e427623b4b32928ebb97f367ec5, type: 3}
+      delay: 0
+  - vocabulary: 8
+    voices:
+    - clip: {fileID: 8300000, guid: 82bb2e9d8d9dc444eb0cd68fe5bf6cc8, type: 3}
+      delay: 0
+  - vocabulary: 9
+    voices:
+    - clip: {fileID: 8300000, guid: 950ab68e279c24a789e605f8bf3d77cf, type: 3}
+      delay: 0
+  - vocabulary: 10
+    voices:
+    - clip: {fileID: 8300000, guid: 16eca6a90f7344793bedc18d17602646, type: 3}
+      delay: 0
+  - vocabulary: 11
+    voices:
+    - clip: {fileID: 8300000, guid: 39bfaebdb62bd4fb3bc9eb9aa9410381, type: 3}
+      delay: 0
+  - vocabulary: 12
+    voices:
+    - clip: {fileID: 8300000, guid: 977691073935642e8aa2d2fb383fd61f, type: 3}
+      delay: 0
+  - vocabulary: 13
+    voices:
+    - clip: {fileID: 8300000, guid: dda8d14ae9c684aa38da1328de978df7, type: 3}
+      delay: 0
+  - vocabulary: 14
+    voices:
+    - clip: {fileID: 8300000, guid: 739fc9a669bd44f77932d48755714a56, type: 3}
+      delay: 0
+  - vocabulary: 15
+    voices:
+    - clip: {fileID: 8300000, guid: a872bd1002c2f47b7acea83968bf31fc, type: 3}
+      delay: 0
+  - vocabulary: 16
+    voices:
+    - clip: {fileID: 8300000, guid: 159df4abe002446299ac2571774c15f5, type: 3}
+      delay: 0
+  - vocabulary: 17
+    voices:
+    - clip: {fileID: 8300000, guid: a2858d73ce64040e49e32f918a5a73d6, type: 3}
+      delay: 0
+  - vocabulary: 18
+    voices:
+    - clip: {fileID: 8300000, guid: b632f2467108b4a449660b2df9dca108, type: 3}
+      delay: 0
+  - vocabulary: 19
+    voices:
+    - clip: {fileID: 8300000, guid: f5a96b8d7a9db40e5896b83cebf346c1, type: 3}
+      delay: 0
+  - vocabulary: 20
+    voices:
+    - clip: {fileID: 8300000, guid: c6a19e37fac2f422889657d0c0875972, type: 3}
+      delay: 0
+  - vocabulary: 21
+    voices:
+    - clip: {fileID: 8300000, guid: 8bb114f71d8df454b9a44da31eb9cae9, type: 3}
+      delay: 0
+  - vocabulary: 22
+    voices:
+    - clip: {fileID: 8300000, guid: 2cd3ca405b29a40e38619fbba17fbe3d, type: 3}
+      delay: 0
+  - vocabulary: 23
+    voices:
+    - clip: {fileID: 8300000, guid: 8d93490f447df453fba0f0300a1b738e, type: 3}
+      delay: 0
+  - vocabulary: 24
+    voices:
+    - clip: {fileID: 8300000, guid: 0333f62f8ee664e639b8b05b47bf78b4, type: 3}
+      delay: 0
+  - vocabulary: 25
+    voices:
+    - clip: {fileID: 8300000, guid: 41af80a3657e24bf9848c979356c6c69, type: 3}
+      delay: 0
+  - vocabulary: 26
+    voices:
+    - clip: {fileID: 8300000, guid: 0312b0e4b15ff498bac9d34ac72673d5, type: 3}
+      delay: 0
+  - vocabulary: 27
+    voices:
+    - clip: {fileID: 8300000, guid: f5a14f2ac1b03410f8e6cef771355b99, type: 3}
+      delay: 0
+  - vocabulary: 28
+    voices:
+    - clip: {fileID: 8300000, guid: 39be04587e9844910a378db4d763bcfc, type: 3}
+      delay: 0
+  - vocabulary: 29
+    voices:
+    - clip: {fileID: 8300000, guid: 5cea8e38eea024deeb9124ae632007ed, type: 3}
+      delay: 0
+  - vocabulary: 30
+    voices:
+    - clip: {fileID: 8300000, guid: 2a9c274703cb24ec3840e812f79e2b96, type: 3}
+      delay: 0
+  - vocabulary: 31
+    voices:
+    - clip: {fileID: 8300000, guid: 6b5a3e931f0a544a0b6e0c48062c283c, type: 3}
+      delay: 0
+  - vocabulary: 32
+    voices:
+    - clip: {fileID: 8300000, guid: 0220fdfacd011433e8fe24608937a223, type: 3}
+      delay: 0
+  - vocabulary: 33
+    voices:
+    - clip: {fileID: 8300000, guid: a662e38766a94437ea51e8e6adffea35, type: 3}
+      delay: 0
+  - vocabulary: 34
+    voices:
+    - clip: {fileID: 8300000, guid: e6b280faa808d4a2c8d96f55e79c5903, type: 3}
+      delay: 0
+  - vocabulary: 35
+    voices:
+    - clip: {fileID: 8300000, guid: 8fea4d144540441b6a5e191918b8cd40, type: 3}
+      delay: 0
+  - vocabulary: 36
+    voices:
+    - clip: {fileID: 8300000, guid: 5700ea71547d94430b3e59755dde2245, type: 3}
+      delay: 0
+  - vocabulary: 37
+    voices:
+    - clip: {fileID: 8300000, guid: d8fcda04338974156bc26f78f0ae894a, type: 3}
+      delay: 0
+  - vocabulary: 38
+    voices:
+    - clip: {fileID: 8300000, guid: 30d116173c5244b05909ae167a45a550, type: 3}
+      delay: 0
+  - vocabulary: 39
+    voices:
+    - clip: {fileID: 8300000, guid: 723b3b7cd117c4fc08149b0c1166bbcb, type: 3}
+      delay: 0
+  - vocabulary: 40
+    voices:
+    - clip: {fileID: 8300000, guid: 515a063eb4ffe485d9fc4e2cea247611, type: 3}
+      delay: 0
+  - vocabulary: 41
+    voices:
+    - clip: {fileID: 8300000, guid: 59674a00be78f47a2816ea090a2592e1, type: 3}
+      delay: 0
+  - vocabulary: 42
+    voices:
+    - clip: {fileID: 8300000, guid: f949c9406441d45ed8b1e3e31a696cd7, type: 3}
+      delay: 0

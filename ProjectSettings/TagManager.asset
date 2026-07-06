@@ -41,6 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 765790285
+    locked: 0
+  - name: Ground
+    uniqueID: 716077599
+    locked: 0
+  - name: Rail
+    uniqueID: 521591159
+    locked: 0
+  - name: Cart
+    uniqueID: 1944857167
+    locked: 0
   m_RenderingLayers:
   - Default
   m_MigratedRenderPipelines: []

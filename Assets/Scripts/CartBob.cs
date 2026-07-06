@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CartBob : MonoBehaviour
+public class CartBob : MonoBehaviour, IStoppable
 {
     [SerializeField] private float fps = 8f;
     [SerializeField] private float small = 2f;
@@ -13,6 +13,7 @@ public class CartBob : MonoBehaviour
     private Vector3 _startPos;
     private int _step;
     private float _timer;
+    private bool _playing;
 
     private void Start()
     {
@@ -22,16 +23,35 @@ public class CartBob : MonoBehaviour
             0f,
             small,
             0f,
+            small,
+            0f,
             middle,
+            0f,
+            small,
+            0f,
+            small,
+            0f,
+            middle,
+            0f,
+            small,
             0f,
             small,
             0f,
             large
         };
+        
+        _playing = true;
+    }
+
+    void IStoppable.Stop()
+    {
+        _playing = false;
     }
 
     private void Update()
     {
+        if (!_playing) return;
+
         _timer += Time.deltaTime;
 
         if (_timer < 1f / fps) return;
